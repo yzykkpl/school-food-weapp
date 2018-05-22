@@ -1,0 +1,59 @@
+<!--pages/category/category.wxml-->
+<import src="../tpls/category/category-tpl.wxml" />
+<view class="container category-container">
+  <view class="category-box">
+    <view class="left-box">
+      <block wx:for="{{product}}">
+        <block wx:if="{{item.type!=3}}">
+          <view class="menu-item {{currentMenuIndex==index?'selected':''}}" data-id="{{item.id}}" data-index="{{index}}" bindtap="changeCategory" data-title-name="{{item.name}}">
+            {{item.name}}
+          </view>
+        </block>
+      </block>
+    </view>
+    <view class="right-box {{transClassArr[currentMenuIndex]}}">
+      <view wx:for="{{product}}">
+        <view class="foods-type-box">
+          <template is="categorydetail" data="{{categoryInfo:item}}" />
+        </view>
+      </view>
+      <!-- <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[0]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[1]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[2]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[3]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[4]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[5]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[6]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[7]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[8]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[7]}}" />
+      </view>
+      <view class="foods-type-box">
+        <template is="categorydetail" data="{{categoryInfo:product[8]}}" />
+      </view> -->
+    </view>
+
+  </view>
+  <loading hidden="{{loadingHidden}}">
+    加载中^_^
+  </loading>
+</view>

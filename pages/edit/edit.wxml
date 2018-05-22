@@ -1,0 +1,60 @@
+<!--pages/register/register.wxml-->
+<view class='container'>
+  <view class='form'>
+    <view class="weui-cells__title" style='text-align:center'>
+      <text class='form-title'>请编辑信息</text>
+    </view>
+    <form bindsubmit="formSubmit">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">姓名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" name="name" value="{{userInfo.name}}" placeholder="请输入姓名" bindconfirm='nameConfirm' />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">学号</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" type='number' name="stdNum" placeholder="{{!teacher?'请输入学号':'教师不用输入'}}" value='{{userInfo.stdNum}}' bindconfirm='stdNumConfirm' disabled='{{teacher}}'/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">手机</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" type='number' name="phone" value="{{userInfo.phone}}" placeholder="请输入手机号" bindconfirm='phoneConfirm' />
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+            <view class="weui-label">学校</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker bindchange="bindSchoolChange" name="school" value="{{schoolIndex}}" range="{{schools}}" range-key='name'>
+              <view class="weui-select weui-select_in-select-after">{{schools[schoolIndex].name}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+            <view class="weui-label">班级</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker bindchange="bindClassChange" name="cls" value="{{classIndex}}" range="{{classes}}" range-key='clsName' disabled='{{teacher}}'>
+              <view class="weui-select weui-select_in-select-after">{{!teacher?classes[classIndex].clsName:'教师不用选择'}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+      <view class="confirm">
+        <button class="weui-btn" form-type='submit' type="primary" plain="true">提交修改</button>
+      </view>
+    </form>
+  </view>
+
+</view>

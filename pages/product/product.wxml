@@ -1,0 +1,54 @@
+<!--pages/product/product.wxml-->
+<view class='container detail-container'>
+  <view class='detail-header-box'>
+    <view class="fixed-btns-box" bindtap="onCartTap">
+      <view class="fiexd-cart">
+        <image src="../../images/icon/cart@top.png"></image>
+        <view wx:if="{{cartTotalCounts.counts1>0}}">{{cartTotalCounts.counts1}}</view>
+      </view>
+    </view>
+
+    <view class="detail-topic-img">
+      <image src="{{product.icon}}" mode="aspectFit"></image>
+    </view>
+
+    <view class="cart-box">
+      <view class='product-counts'>
+        <picker class="{{product.stock==0?'disabled':''}}" range='{{countsArray}}' bindchange='bindPickerChange' value='{{index}}'>
+          <!--因为picker对flex支持不好，所以加了一层view-->
+          <view>
+            <text class="counts-tips">数量</text>
+            <text class="counts-data">{{productCounts}}</text>
+            <image class="counts-icon" src="../../images/icon/arrow@down.png"></image>
+          </view>
+        </picker>
+      </view>
+      <view class='middle-border'></view>
+      <view class="add-cart-btn  {{maxCounts<=0?'disabled':''}}" bindtap='onAddToCart'>
+        <text>加入购物车</text>
+        <image class="cart-icon" src="../../images/icon/cart.png">
+        <image id="small-top-img" class="small-top-img {{isFly?'animate':''}}"
+                       src="{{product.icon}}" mode="aspectFill" style="{{translateStyle}}"></image>
+        </image>
+      </view>
+    </view>
+
+    <view class="basic-info-box">
+      <view class="stock" wx:if="{{product.stock>0}}">有货</view>
+      <view class="stock no" wx:else>缺货</view>
+      <view class="name">{{product.name}}</view>
+      <view class="price">￥{{product.price}}</view>
+    </view>
+
+  </view>
+  <view class="home-main-header">商品详情</view>
+  <view class='line'></view>
+  <view class='product-detail-box'>
+    <view class="product-detail-imgs">
+     <image src="{{product.image}}" mode="widthFix" bindtap='previewImage' ></image>
+    </view>
+  </view>
+
+
+
+</view>

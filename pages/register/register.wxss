@@ -1,0 +1,18 @@
+/* pages/register/register.wxss */
+.choices{
+  margin-top:20rpx;
+  display: flex;
+  justify-content: space-around;
+  /* margin: 20rpx 0 20rpx 0; */
+}
+.form{
+  margin-top:60rpx 
+}
+.form-title{
+  font-weight:bold;
+  color:rgba(26, 173, 25, 0.6)
+}
+.confirm{
+  margin-top: 60rpx; 
+  padding: 0% 25% 0% 25%
+}

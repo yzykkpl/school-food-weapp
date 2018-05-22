@@ -1,0 +1,21 @@
+<template name="categorydetail">
+  <view class="category-detail-box" hidden="{{!categoryInfo}}">
+    <view class="category-header">
+      <image src="{{categoryInfo.icon}}" mode="aspectFill"></image>
+    </view>
+    <view class="category-title">
+      <text>{{categoryInfo.name}}</text>
+    </view>
+    <scroll-view scroll-y='true' style='height:750rpx'>
+      <view class="category-main">
+        <block wx:for="{{categoryInfo.foods}}">
+          <view class="category-goods-items" data-id="{{item.id}}" bindtap="onProductsItemTap">
+            <image src="{{item.icon}}" mode="aspectFit"></image>
+            <view style='width:50%'>{{item.name}}</view>
+            <view style='width:20%'>￥{{item.price}}</view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+</template>
