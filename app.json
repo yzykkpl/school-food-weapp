@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/meal/meal",
     "pages/my/my",
     "pages/start/start",
     "pages/register/register",
     "pages/category/category",
-    
     "pages/index/index",
     "pages/product/product",
     "pages/cart/cart",

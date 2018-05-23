@@ -1,6 +1,6 @@
 // pages/category/category.js
 import { Base } from '../../utils/base.js';
-var base=new Base()
+var base = new Base()
 Page({
 
   /**
@@ -9,8 +9,8 @@ Page({
   data: {
     loadingHidden: false,
     transClassArr: ['tanslate0', 'tanslate1', 'tanslate2', 'tanslate3', 'tanslate4', 'tanslate5', 'tanslate6', 'tanslate7', 'tanslate8', 'tanslate9', 'tanslate10'],
-    product:[],
-    currentMenuIndex:0
+    product: [],
+    currentMenuIndex: 0
   },
 
   /**
@@ -20,7 +20,7 @@ Page({
     this._loadData()
   },
 
-  _loadData:function(){
+  _loadData: function () {
     this.setData({
       product: wx.getStorageSync('product'),
       loadingHidden: true,
@@ -30,7 +30,7 @@ Page({
   },
   /*切换分类*/
   changeCategory: function (event) {
-    var index = base.getDataSet(event,'index'),
+    var index = base.getDataSet(event, 'index'),
       id = base.getDataSet(event, 'id')//获取data-set
     this.setData({
       currentMenuIndex: index
@@ -40,15 +40,23 @@ Page({
 
   onProductsItemTap: function (event) {
     var id = base.getDataSet(event, 'id')
-    wx.navigateTo({
-      url: '../product/product?id=' + id
-    })
+    var category = base.getDataSet(event, 'type')
+    if (category == 1) {
+      wx.navigateTo({
+        url: '../meal/meal?id=' + id
+      })
+    }
+    else {
+      wx.navigateTo({
+        url: '../product/product?id=' + id
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+
   }
 
 })

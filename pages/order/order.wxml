@@ -16,7 +16,6 @@
     <view class="order-status">
       <text class="order-status-txt unpay" wx:if="{{payStatus==0}}">待付款</text>
       <text class="order-status-txt payed" wx:if="{{payStatus==1}}">已付款</text>
-      <text class="order-status-txt done" wx:if="{{payStatus==2}}">已退款</text>
     </view>
   </view>
 
