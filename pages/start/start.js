@@ -4,24 +4,23 @@ var app = getApp()
 var token = new Token()
 Page({
   data: {
-    authBtn:false
+    authBtn: false
   },
   onLoad: function () {
     this.setData({
       verifyUrl: token.getVerifyUrl()
     })
     var utoken = wx.getStorageSync('token');
-    if(!utoken){
+    if (!utoken) {
       token.getTokenFromServer(this.login)
-    }else{
-    this.login(utoken)
+    } else {
+      this.login(utoken)
     }
   },
-  getToken:function(){
+  getToken: function () {
     token.getTokenFromServer(this.login)
   },
-  login:function(token) {
-    console.log('login--'+token)
+  login: function (token) {
     var that = this;
     wx.request({
       url: that.data.verifyUrl + token,
@@ -29,8 +28,8 @@ Page({
       success: function (res) {
         var code = res.data.code;
         if (code == -1) {
-          that.getTokenFromServer(that.login);
-        } else if(code==-2){
+          that.getToken()
+        } else if (code == -2) {
           wx.navigateTo({
             url: '../register/register',
           })
@@ -44,6 +43,6 @@ Page({
       }
     })
   }
-  
+
 
 });

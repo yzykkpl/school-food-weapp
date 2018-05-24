@@ -1,11 +1,10 @@
 // pages/order/order.js
-import { Order } from '../order/order-model.js';
+import { Order } from '../meal-order/meal-order-model.js';
 import { Cart } from '../cart/cart-model.js';
 import { Address } from '../../utils/address.js';
 import { Token } from '../../utils/token.js';
 var app = getApp()
 var order = new Order();
-var cart = new Cart();
 var address = new Address();
 var token = new Token()
 Page({
@@ -15,8 +14,8 @@ Page({
    */
   data: {
     fromCartFlag: true,
-    addressInfo: null,
-    _storageKeyName: 'address'
+    userInfo: null,
+    _storageKeyName: 'userInfo'
   },
 
   /**
@@ -24,16 +23,26 @@ Page({
    */
   onLoad: function (options) {
     console.log(options)
-    var flag = options.from == 'cart',
+    var flag = options.from == 'meal',
       that = this;
     this.data.fromCartFlag = flag;
-    this.data.account = options.account;
 
-    //来自于购物车
+    var userInfo = wx.getStorageSync('userInfo')
+    if(userInfo==null){
+      wx.showLoading({
+        title: '加载中',
+      })
+      var userToken=wx.getStorageSync('token')
+      token.login(userToken)
+    }
+    this.setData({
+      userInfo:wx.getStorageSync('userInfo')
+    })
+    //新订单
     if (flag) {
       this.setData({
-        productsArr: cart.getCartDataFromLocal(true),
-        account: options.account,
+        meal: wx.getStorageSync(options.id),
+        account:options.account,
         orderStatus: 0,
         payStatus:0
       });
@@ -47,54 +56,46 @@ Page({
   },
 
   /*修改或者添加地址信息*/
-  editAddress: function () {
-    var that = this;
-    wx.chooseAddress({
-      success: function (res) {
-        var addressInfo = {
-          name: res.userName,
-          phone: res.telNumber,
-          address: address.setAddressInfo(res)
-        };
-        that._bindAddressInfo(addressInfo);
+  // editAddress: function () {
+  //   var that = this;
+  //   wx.chooseAddress({
+  //     success: function (res) {
+  //       var addressInfo = {
+  //         name: res.userName,
+  //         phone: res.telNumber,
+  //         address: address.setAddressInfo(res)
+  //       };
+  //       that._bindAddressInfo(addressInfo);
 
-        //保存地址
-        wx.setStorageSync(that.data._storageKeyName, addressInfo)
-      },
-      fail: function () {
-        wx.getSetting({
-          success: function (res) {
-            if (!res.authSetting['scope.address']) {
-              wx.showModal({
-                title: '您已拒绝地址授权',
-                content: '请点击右上角"..."->"关于"->右上角"..."->"设置"进行授权',
-              })
-            }
-          }
-        })
-      }
-    })
-  },
+  //       //保存地址
+  //       wx.setStorageSync(that.data._storageKeyName, addressInfo)
+  //     },
+  //     fail: function () {
+  //       wx.getSetting({
+  //         success: function (res) {
+  //           if (!res.authSetting['scope.address']) {
+  //             wx.showModal({
+  //               title: '您已拒绝地址授权',
+  //               content: '请点击右上角"..."->"关于"->右上角"..."->"设置"进行授权',
+  //             })
+  //           }
+  //         }
+  //       })
+  //     }
+  //   })
+  // },
 
   /*绑定地址信息*/
-  _bindAddressInfo: function (addressInfo) {
-    this.setData({
-      addressInfo: addressInfo
-    });
-  },
+  // _bindAddressInfo: function (addressInfo) {
+  //   this.setData({
+  //     addressInfo: addressInfo
+  //   });
+  // },
 
   /*下单和付款*/
   pay: function () {
-    if(!app.data.onPay){
-      this.showTips('太晚啦', '本店已经打烊');
-      return;
-    }
-    if (!this.data.addressInfo) {
-      this.showTips('下单提示', '请填写您的收货地址');
-      return;
-    }
-    if(app.data.allow == false){
-      this.showTips('太远啦', '您的位置超出配送范围')
+    if (!this.data.userInfo) {
+      this.showTips('下单提示', '个人信息获取失败');
       return;
     }
     wx.showLoading({
@@ -102,7 +103,6 @@ Page({
       mask: true
     })
     if (this.data.orderStatus == 0) {
-
       this._firstTimePay();
     } else {
       this._oneMoresTimePay();
@@ -114,11 +114,11 @@ Page({
     var userToken = wx.getStorageSync('token');
     var orderForm = {};
     if (userToken == null) {
-      token.verify();
+      token.getTokenFromServer()
       showTips("错误", "验证失败，请稍后重试", false);
       return
     } else {
-      orderForm = this._makeOrderForm(this.data.productsArr, userToken)
+      orderForm = this._makeOrderForm(this.data.meal, userToken)
     }
     order = new Order();
     var that = this;
@@ -133,28 +133,24 @@ Page({
           fromCartFlag: false
         })
         //开始支付
-        that._execPay(orderId)
-      } else {
-        wx.showModal({
-          title: '错误',
-          content: '下单失败,请返回购物车下拉刷新库存信息',
-          showCancel: false,
-          success: function (res) {
-            if (res.confirm) {
-              wx.switchTab({
-                url: '/pages/cart/cart'
-              });
-            }
-
-          }
-        });  // 下单失败
+        console.log("开始支付")
+        //that._execPay(orderId)
+      } 
+      else if (data.code == -1){
+        wx.showToast({
+          title: '登录校验失败',
+          icon: 'none',
+          duration: 1500
+        })
+        that.token.getTokenFromServer()
       }
     });
   },
 
   /* 再次次支付*/
   _oneMoresTimePay: function () {
-    this._execPay(this.data.orderId);
+    console.log("二次支付")
+    //this._execPay(this.data.orderId);
   },
 
 
@@ -180,24 +176,16 @@ Page({
     });
   },
   // 拼装订单
-  _makeOrderForm: function (productsArr, token) {
-    var userInfo = this.data.addressInfo
-    var items = []
-
-    for (let i = 0; i < productsArr.length; i++) {
-      var item = {
-        productId: productsArr[i].id,
-        productQuantity: productsArr[i].counts
-      }
-      items.push(item);
-    }
+  _makeOrderForm: function (meal, token) {
+    var userInfo = this.data.userInfo
     var orderForm = {
-      name: userInfo.name,
-      phone: userInfo.phone,
-      address: userInfo.address,
-      token: token,
-      items: JSON.stringify(items)
-
+      buyerName: userInfo.name,
+      buyerPhone: userInfo.phone,
+      stdNum: userInfo.stdNum,
+      buyerSchool: userInfo.school,
+      buyerCls:userInfo.cls,
+      mealId: this.data.meal.id,
+      token:token
     }
     return orderForm;
   },
@@ -211,28 +199,20 @@ Page({
     
     if (!order.onPay) {
       this.showTips('打烊啦', '现在已经不配送啦', true);//屏蔽支付，提示
-      this.deleteProducts(); //将已经下单的商品从购物车删除
+
       return;
     }
     var that = this;
     order.execPay(orderId, (statusCode) => {
       if (statusCode != 0) {
-        that.deleteProducts();
+
+
         var flag = statusCode == 2;
         wx.navigateTo({
           url: '../pay-result/pay-result?orderId=' + orderId + '&flag=' + flag + '&from=order'
         });
       }
     });
-  },
-
-  //将已经下单的商品从购物车删除
-  deleteProducts: function () {
-    var ids = [], arr = this.data.productsArr;
-    for (let i = 0; i < arr.length; i++) {
-      ids.push(arr[i].id);
-    }
-    cart.delete(ids);
   },
 
   /**
@@ -247,33 +227,24 @@ Page({
    */
   onShow: function () {
     console.log("order show")
-   
     if (this.data.orderId) {
       var that = this;
       //下单后，支付成功或者失败后，点左上角返回时能够更新订单状态 所以放在onshow中
       var orderId = this.data.orderId;
       order.getOrderInfoById(orderId, (data) => {
+        console.log(data)
         var date = new Date(data.data.createTime*1000)
          that.setData({
            payStatus: data.data.payStatus,
            orderStatus:data.data.orderStatus,
-           productsArr: data.data.orderDetailList,
+           meal: data.data.mealInfo,
            account: data.data.orderAmount,
            basicInfo: {
            orderTime: date.toLocaleString(),
            orderNo: data.data.orderId
-           }, 
-           addressInfo: {
-             name: data.data.buyerName,
-             phone: data.data.buyerPhone,
-             address: data.data.buyerAddress
            }
-
          });
       });
-    }else{
-      //this._bindAddressInfo(wx.getStorageSync("address"))
-      console.log(wx.getStorageSync(this.data._storageKeyName))
     }
     
   },

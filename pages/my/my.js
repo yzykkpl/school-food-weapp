@@ -8,16 +8,31 @@ var order = new Order();
 var my = new My();
 var token = new Token();
 var app = getApp()
+var sliderWidth = 115;
 
 Page({
   data: {
+    tabs: ['套餐订单', '水果订单'],
     pageIndex: 1,
-    isLoadedAll: false,
+    isLoadedAllFruit: false,
+    isLoadedAllMeal:false,
     loadingHidden: false,
     orderArr: [],
-    addressInfo: null
+    addressInfo: null,
+    activeIndex: 0,
+    sliderOffset: 0,
+    sliderLeft: 0
   },
   onLoad: function () {
+    var that = this
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
+          sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
+        });
+      }
+    });
     this._loadData();
   },
   onShow: function () {
@@ -38,13 +53,13 @@ Page({
     order.execSetStorageSync(false);  //更新标志位
   },
 
-  /*订单信息*/
+  /*水果订单信息*/
   _getOrders: function (callback) {
     var that = this;
     var token = wx.getStorageSync('token')
     if (!token) {
       this.showTips('错误', '登录信息过期,请重试')
-     
+
       return;
     }
     order.getOrders(this.data.pageIndex - 1, token, (res) => {
@@ -58,12 +73,41 @@ Page({
           orderArr: that.data.orderArr
         });
       } else {
-        that.data.isLoadedAll = true;  //已经全部加载完毕
+        that.data.isLoadedAllFruit = true;  //已经全部加载完毕
         that.data.pageIndex = 1;
       }
       callback && callback();
     });
   },
+
+  //套餐订单信息
+  _getMealOrders: function (callback) {
+    //TODO
+    // var that = this;
+    // var token = wx.getStorageSync('token')
+    // if (!token) {
+    //   this.showTips('错误', '登录信息过期,请重试')
+
+    //   return;
+    // }
+    // order.getOrders(this.data.pageIndex - 1, token, (res) => {
+    //   var data = res.data;
+    //   that.setData({
+    //     loadingHidden: true
+    //   });
+    //   if (data.length > 0) {
+    //     that.data.orderArr.push.apply(that.data.orderArr, data);  //数组合并
+    //     that.setData({
+    //       orderArr: that.data.orderArr
+    //     });
+    //   } else {
+    //     that.data.isLoadedAllFruit = true;  //已经全部加载完毕
+    //     that.data.pageIndex = 1;
+    //   }
+    //   callback && callback();
+    // });
+  },
+
 
   /*显示订单的具体信息*/
   showOrderDetailInfo: function (event) {
@@ -116,7 +160,7 @@ Page({
     var that = this;
     this.data.orderArr = [];  //订单初始化
     this._getOrders(() => {
-      that.data.isLoadedAll = false;  //是否加载完全
+      that.data.isLoadedAllFruit = false;  //是否加载完全
       that.data.pageIndex = 1;
       wx.stopPullDownRefresh();
       order.execSetStorageSync(false);  //更新标志位
@@ -125,9 +169,18 @@ Page({
 
 
   onReachBottom: function () {
-    if (!this.data.isLoadedAll) {
-      this.data.pageIndex++;
-      this._getOrders();
+    //加载更多水果订单
+    if (activeIndex==1){
+      if (!this.data.isLoadedAllFruit) {
+        this.data.pageIndex++;
+        this._getOrders();
+      }
+    }
+    if (activeIndex == 0) {
+      if (!this.data.isLoadedAllMeal) {
+        this.data.pageIndex++;
+        this._getMealOrders();
+      }
     }
   },
 
@@ -170,9 +223,15 @@ Page({
     });
   },
   //编辑信息
-  editUserInfo:function(){
+  editUserInfo: function () {
     wx.navigateTo({
       url: '../edit/edit',
     })
+  },
+  tabClick: function (e) {
+    this.setData({
+      sliderOffset: e.currentTarget.offsetLeft,
+      activeIndex: e.currentTarget.id
+    });
   }
 })

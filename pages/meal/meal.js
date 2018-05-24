@@ -25,9 +25,10 @@ Page({
     })
   },
   submitOrder: function () {
+    var account = this.data.product.price
     var id = this.data.id
     wx.navigateTo({
-      url: '../order/order?account=1&from=meal&id='+id
+      url: '../meal-order/meal-order?account=' + account+'&from=meal&id='+id
     });
   },
 

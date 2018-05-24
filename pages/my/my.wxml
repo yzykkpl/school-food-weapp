@@ -8,16 +8,27 @@
       <text class="name">{{userInfo.name}}</text>
       <text class="name">{{userInfo.school}}</text>
     </view>
-    <navigator class="my-inf"  url="/pages/edit/edit" open-type="navigate" hover-class="other-navigator-hover">
-    <button class="weui-btn mini-btn" type="primary" size="mini">编辑</button>
+    <navigator class="my-inf" url="/pages/edit/edit" open-type="navigate" hover-class="other-navigator-hover">
+      <button class="weui-btn mini-btn" type="primary" size="mini">编辑</button>
     </navigator>
     <!-- <view class="my-inf" ontap="editUserInfo">
       <button class="weui-btn mini-btn" type="primary" size="mini">编辑</button>
     </view> -->
   </view>
   <view class="my-order">
-    <view class="item-title">我的订单</view>
-    <view class="item-main">
+    <!-- <view class="item-title">我的订单</view> -->
+    <view class="order-tabs">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view id="{{index}}" class="tab {{activeIndex == index ? 'tab-on' : ''}}" bindtap="tabClick">
+          <view class="weui-navbar__title">{{item}}</view>
+        </view>
+      </block>
+    </view>
+    <view>
+      <view class="tab-slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+
+    <view hidden="{{activeIndex != 1}}" class="item-main">
       <block wx:for="{{orderArr}}">
         <view class="order-item">
           <view class="order-header" ontap="showOrderDetailInfo" data-id="{{item.orderId}}">

@@ -9,7 +9,7 @@ Page({
   data: {
     maxCounts:0,
     product: {},
-    countsArray: [],
+    countsArray: [1,2,3,4,5],
     productCounts: 1,
     tabs:['商品详情'],
     cartTotalCounts: 0,
@@ -33,28 +33,28 @@ Page({
 
   },
   _updateCounts:function(){
-    var that=this
-    var cartData = cart.getCartDataFromLocal();//拿到购物车中的数据
-    that.setData({
-      maxCounts: that.data.product.stock
-    })
-    for (var i = 0; i < cartData.length; i++) {
-      if (cartData[i].id == that.data.product.id) {
-        that.setData({
-          maxCounts: that.data.product.stock - cartData[i].counts
-        })
+    // var that=this
+    // var cartData = cart.getCartDataFromLocal();//拿到购物车中的数据
+    // that.setData({
+    //   maxCounts: that.data.product.stock
+    // })
+    // for (var i = 0; i < cartData.length; i++) {
+    //   if (cartData[i].id == that.data.product.id) {
+    //     that.setData({
+    //       maxCounts: that.data.product.stock - cartData[i].counts
+    //     })
       
-        break;
-      }
-    }
+    //     break;
+    //   }
+    // }
 
-    var countsArray = new Array()
-    for (var i = 1; i <= Math.min(10, that.data.maxCounts); i++) {
-      countsArray.push(i)
-    }
-    that.setData({
-      countsArray: countsArray
-    })
+    // var countsArray = new Array()
+    // for (var i = 1; i <= Math.min(10, that.data.maxCounts); i++) {
+    //   countsArray.push(i)
+    // }
+    // that.setData({
+    //   countsArray: countsArray
+    // })
     wx.hideLoading()
   },
   //picker监听

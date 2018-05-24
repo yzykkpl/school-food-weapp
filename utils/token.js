@@ -38,6 +38,8 @@ class Token {
                 if(code==-1){
                   that.getTokenFromServer(callBack);
                 }else{
+                  wx.setStorageSync('userInfo', res.data.data.userInfo)
+                  wx.hideLoading()
                   callBack && callBack(res.data)
                 }
             }
