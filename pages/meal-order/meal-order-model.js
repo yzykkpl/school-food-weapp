@@ -5,7 +5,7 @@
 import { Base } from '../../utils/base.js';
 import { Token } from '../../utils/token.js'
 
-class Order extends Base {
+class MealOrder extends Base {
 
 
   constructor() {
@@ -73,12 +73,15 @@ class Order extends Base {
   }
 
   /*获得所有订单,pageIndex 从1开始*/
-  getOrders(pageIndex, token, callback) {
+  getOrders(pageIndex, token,start,end,callback) {
+
     var allParams = {
-      url: 'buyer/order/list',
+      url: 'buyer/meal/order/dateList',
       data: {
         token: token,
-        page: pageIndex
+        page: pageIndex,
+        start:start,
+        end:end
       },
       type: 'get',
       sCallBack: function (data) {
@@ -133,11 +136,11 @@ class Order extends Base {
       this.token.getTokenFromServer()
       return;
     } else {
-      this.token._veirfyFromServer(token)
+      this.token.login(token)
     }
     var that = this;
     var allParams = {
-      url: '/buyer/order/cancel',
+      url: '/buyer/meal/order/cancel',
       method: 'POST',
       data: {
         token: token,
@@ -154,4 +157,4 @@ class Order extends Base {
   }
 }
 
-export { Order };
+export { MealOrder };

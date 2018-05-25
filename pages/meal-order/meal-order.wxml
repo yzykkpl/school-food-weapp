@@ -14,26 +14,30 @@
       </view>
     </view>
     <view class="order-status">
-      <text class="order-status-txt unpay" wx:if="{{payStatus==0}}">待付款</text>
-      <text class="order-status-txt payed" wx:if="{{payStatus==1}}">已付款</text>
+      <text class="order-status-txt unpay" wx:if="{{payStatus==0&&orderStatus==0}}">待付款</text>
+      <text class="order-status-txt payed" wx:if="{{payStatus==1&&orderStatus==0}}">已付款</text>
+      <text class="order-status-txt done" wx:if="{{orderStatus==4}}">已退款</text>
+      <text class="order-status-txt done" wx:if="{{orderStatus==3}}">申请退款</text>
+      <text class="order-status-txt done" wx:if="{{orderStatus==1}}">已完结</text>
+      <text class="order-status-txt done" wx:if="{{orderStatus==2}}">已取消</text>
     </view>
   </view>
 
   <!--地址-->
   <view class="order-address-info disabled">
-      <view class="contact-box">
-        <view>
-          <view class="contact">
-              <view>
-                <image src="../../images/icon/user.png"></image>
-                <text class="val">{{userInfo.name}} -</text>
-                <text class="val"> {{userInfo.school}} -</text>
-                <text class="val"> {{userInfo.cls}}</text>
-              </view>
+    <view class="contact-box">
+      <view>
+        <view class="contact">
+          <view>
+            <image src="../../images/icon/user.png"></image>
+            <text class="val">{{userInfo.name}} -</text>
+            <text class="val"> {{userInfo.school}} -</text>
+            <text class="val"> {{userInfo.cls}}</text>
           </view>
-          
         </view>
+
       </view>
+    </view>
   </view>
 
   <!--列表-->
@@ -49,7 +53,7 @@
         </view>
       </view>
     </block>
-    </view>
+  </view>
 
   <!--结算-->
   <view class="footer-account-box order-accounts">
@@ -57,5 +61,6 @@
       付款合计：￥{{account}}
     </view>
     <view wx:if="{{payStatus==0&&orderStatus==0}}" class="pay {{!addressInfo?'disabled':''}}" ontap="pay">去付款</view>
+        <view wx:if="{{payStatus==1&&orderStatus!=1}}" class="pay {{!addressInfo?'disabled':''}}" ontap="refund">去付款</view>
   </view>
 </view>

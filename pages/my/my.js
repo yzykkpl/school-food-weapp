@@ -1,10 +1,12 @@
 import { Address } from '../../utils/address.js';
 import { Order } from '../order/order-model.js';
+import { MealOrder } from '../meal-order/meal-order-model.js';
 import { My } from '../my/my-model.js';
 import { Token } from '../../utils/token.js';
 
 var address = new Address();
 var order = new Order();
+var mealOrder=new MealOrder();
 var my = new My();
 var token = new Token();
 var app = getApp()
@@ -14,16 +16,35 @@ Page({
   data: {
     tabs: ['套餐订单', '水果订单'],
     pageIndex: 1,
+    mealPageIndex:1,
     isLoadedAllFruit: false,
     isLoadedAllMeal:false,
     loadingHidden: false,
     orderArr: [],
+    mealOrderArr:[],
     addressInfo: null,
     activeIndex: 0,
     sliderOffset: 0,
-    sliderLeft: 0
+    sliderLeft: 0,
+    start:'2018-01-01',
+    end:'2020-01-01'
   },
   onLoad: function () {
+    var date=new Date()
+    var currentYear=date.getFullYear();
+    var currentMounth=date.getMonth();
+    var nextMounth = currentMounth+1;
+    nextMounth = (nextMounth < 10 ? "0" + (nextMounth + 1) : nextMounth + 1);
+    currentMounth = (currentMounth < 10 ? "0" + (currentMounth+1) : currentMounth+1); 
+    var startDate = currentYear.toString() + '-' + currentMounth.toString()+'-'+'01'
+    var endDate = currentYear.toString() + '-' + nextMounth.toString() + '-' + '01'
+    if (currentMounth==12){
+      endDate = (currentYear+1).toString()+'-'+'01-01'
+    }
+    this.setData({
+      start: startDate,
+      end: endDate
+    })
     var that = this
     wx.getSystemInfo({
       success: function (res) {
@@ -33,6 +54,7 @@ Page({
         });
       }
     });
+    
     this._loadData();
   },
   onShow: function () {
@@ -50,6 +72,7 @@ Page({
   _loadData: function () {
     var that = this;
     this._getOrders();
+    this._getMealOrders();
     order.execSetStorageSync(false);  //更新标志位
   },
 
@@ -83,33 +106,33 @@ Page({
   //套餐订单信息
   _getMealOrders: function (callback) {
     //TODO
-    // var that = this;
-    // var token = wx.getStorageSync('token')
-    // if (!token) {
-    //   this.showTips('错误', '登录信息过期,请重试')
+    var that = this;
+    var token = wx.getStorageSync('token')
+    if (!token) {
+      this.showTips('错误', '登录信息过期,请重试')
 
-    //   return;
-    // }
-    // order.getOrders(this.data.pageIndex - 1, token, (res) => {
-    //   var data = res.data;
-    //   that.setData({
-    //     loadingHidden: true
-    //   });
-    //   if (data.length > 0) {
-    //     that.data.orderArr.push.apply(that.data.orderArr, data);  //数组合并
-    //     that.setData({
-    //       orderArr: that.data.orderArr
-    //     });
-    //   } else {
-    //     that.data.isLoadedAllFruit = true;  //已经全部加载完毕
-    //     that.data.pageIndex = 1;
-    //   }
-    //   callback && callback();
-    // });
+      return;
+    }
+    mealOrder.getOrders(this.data.mealPageIndex - 1, token, this.data.start,this.data.end,(res) => {
+      var data = res.data;
+      that.setData({
+        loadingHidden: true
+      });
+      if (data.length > 0) {
+        that.data.mealOrderArr.push.apply(that.data.mealOrderArr, data);  //数组合并
+        that.setData({
+          mealOrderArr: that.data.mealOrderArr
+        });
+      } else {
+        that.data.isLoadedAllMeal = true;  //已经全部加载完毕
+        that.data.mealPageIndex = 1;
+      }
+      callback && callback();
+    });
   },
 
 
-  /*显示订单的具体信息*/
+  /*显示水果订单的具体信息*/
   showOrderDetailInfo: function (event) {
     var id = order.getDataSet(event, 'id');
     wx.navigateTo({
@@ -117,7 +140,14 @@ Page({
     });
   },
 
-  /*未支付订单再次支付*/
+  showMealOrderDetailInfo: function (event) {
+    var id = order.getDataSet(event, 'id');
+    wx.navigateTo({
+      url: '../meal-order/meal-order?from=order&orderId=' + id
+    });
+  },
+
+  /*水果未支付订单再次支付*/
   rePay: function (event) {
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
@@ -130,7 +160,7 @@ Page({
     }
   },
 
-  /*支付*/
+  /*水果支付*/
   _execPay: function (id, index) {
     var that = this;
     order.execPay(id, (statusCode) => {
@@ -150,7 +180,45 @@ Page({
           url: '../pay-result/pay-result?orderId=' + id + '&flag=' + flag + '&from=my'
         });
       } else {
-        that.showTips('支付失败', '商品已下架或库存不足');
+        that.showTips('支付失败', '');
+      }
+    });
+  },
+
+  /*水套餐未支付订单再次支付*/
+  mealRePay: function (event) {
+    var id = order.getDataSet(event, 'id'),
+      index = order.getDataSet(event, 'index');
+
+    //online 上线实例，屏蔽支付功能
+    if (order.onPay) {
+      this._mealExecPay(id, index);
+    } else {
+      this.showTips('支付提示', '本产品仅用于演示，支付系统已屏蔽');
+    }
+  },
+
+  /*水果支付*/
+  _mealExecPay: function (id, index) {
+    var that = this;
+    mealOrder.execPay(id, (statusCode) => {
+      if (statusCode > 0) {
+        var flag = statusCode == 2;
+
+        //更新订单显示状态
+        if (flag) {
+          that.data.mealOrderArr[index].payStatus = 1;
+          that.setData({
+            mealOrderArr: that.data.mealOrderArr
+          });
+        }
+
+        //跳转到 成功页面
+        wx.navigateTo({
+          url: '../pay-result/pay-result?orderId=' + id + '&flag=' + flag + '&from=my'
+        });
+      } else {
+        that.showTips('支付失败', '');
       }
     });
   },
@@ -162,6 +230,12 @@ Page({
     this._getOrders(() => {
       that.data.isLoadedAllFruit = false;  //是否加载完全
       that.data.pageIndex = 1;
+      wx.stopPullDownRefresh();
+      order.execSetStorageSync(false);  //更新标志位
+    });
+    this._getMealOrders(() => {
+      that.data.isLoadedAllMeal = false;  //是否加载完全
+      that.data.mealPageIndex = 1;
       wx.stopPullDownRefresh();
       order.execSetStorageSync(false);  //更新标志位
     });
@@ -178,7 +252,7 @@ Page({
     }
     if (activeIndex == 0) {
       if (!this.data.isLoadedAllMeal) {
-        this.data.pageIndex++;
+        this.data.mealPageIndex++;
         this._getMealOrders();
       }
     }
@@ -204,12 +278,31 @@ Page({
     });
   },
 
-  //取消订单
+  //取消水果订单
   _cancel: function (event) {
     var that = this;
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
     order.cancel(id, (data) => {
+      if (data.code == 0) {
+        that.data.orderArr[index].payStatus = -1;
+        that.data.orderArr[index].orderStatus = 2;
+        that.setData({
+          orderArr: that.data.orderArr
+        });
+        that.onPullDownRefresh()
+      } else {
+        that.showTips('错误', '取消失败');
+      }
+    });
+  },
+
+  //取消套餐订单
+  _mealCancel: function (event) {
+    var that = this;
+    var id = mealOrder.getDataSet(event, 'id'),
+      index = order.getDataSet(event, 'index');
+    mealOrder.cancel(id, (data) => {
       if (data.code == 0) {
         that.data.orderArr[index].payStatus = -1;
         that.data.orderArr[index].orderStatus = 2;

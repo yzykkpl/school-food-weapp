@@ -1,10 +1,10 @@
 // pages/order/order.js
-import { Order } from '../meal-order/meal-order-model.js';
+import { MealOrder } from '../meal-order/meal-order-model.js';
 import { Cart } from '../cart/cart-model.js';
 import { Address } from '../../utils/address.js';
 import { Token } from '../../utils/token.js';
 var app = getApp()
-var order = new Order();
+var order = new MealOrder();
 var address = new Address();
 var token = new Token()
 Page({
@@ -102,7 +102,7 @@ Page({
       title: '加载中^_^',
       mask: true
     })
-    if (this.data.orderStatus == 0) {
+    if (this.data.payStatus == 0) {
       this._firstTimePay();
     } else {
       this._oneMoresTimePay();
@@ -232,7 +232,7 @@ Page({
       //下单后，支付成功或者失败后，点左上角返回时能够更新订单状态 所以放在onshow中
       var orderId = this.data.orderId;
       order.getOrderInfoById(orderId, (data) => {
-        console.log(data)
+        //console.log(data)
         var date = new Date(data.data.createTime*1000)
          that.setData({
            payStatus: data.data.payStatus,
