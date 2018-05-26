@@ -32,6 +32,23 @@ class MealOrder extends Base {
     };
     this.request(allParams);
   }
+  //申请退款
+  refund(refundForm, callback) {
+    var that = this;
+    var allParams = {
+      url: 'buyer/meal/order/refund',
+      method: 'post',
+      data: refundForm,
+      sCallBack: function (data) {
+        that.execSetStorageSync(true);
+        callback && callback(data);
+      },
+      eCallback: function (err) {
+        console.log(err)
+      }
+    };
+    this.request(allParams);
+  }
 
   /*
   * 拉起微信支付

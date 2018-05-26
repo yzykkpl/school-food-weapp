@@ -34,8 +34,8 @@ Page({
     var currentYear=date.getFullYear();
     var currentMounth=date.getMonth();
     var nextMounth = currentMounth+1;
-    nextMounth = (nextMounth < 10 ? "0" + (nextMounth + 1) : nextMounth + 1);
-    currentMounth = (currentMounth < 10 ? "0" + (currentMounth+1) : currentMounth+1); 
+    nextMounth = (nextMounth < 9 ? "0" + (nextMounth + 1) : nextMounth + 1);
+    currentMounth = (currentMounth < 9 ? "0" + (currentMounth+1) : currentMounth+1); 
     var startDate = currentYear.toString() + '-' + currentMounth.toString()+'-'+'01'
     var endDate = currentYear.toString() + '-' + nextMounth.toString() + '-' + '01'
     if (currentMounth==12){
@@ -85,7 +85,7 @@ Page({
 
       return;
     }
-    order.getOrders(this.data.pageIndex - 1, token, (res) => {
+    order.getOrders(this.data.pageIndex - 1, token, this.data.start, this.data.end,(res) => {
       var data = res.data;
       that.setData({
         loadingHidden: true
@@ -118,6 +118,7 @@ Page({
       that.setData({
         loadingHidden: true
       });
+
       if (data.length > 0) {
         that.data.mealOrderArr.push.apply(that.data.mealOrderArr, data);  //数组合并
         that.setData({
@@ -226,31 +227,32 @@ Page({
   /*下拉刷新页面*/
   onPullDownRefresh: function () {
     var that = this;
-    this.data.orderArr = [];  //订单初始化
+    this.setData({
+      orderArr:[],
+      mealOrderArr:[],
+      isLoadedAllFruit:false,
+      isLoadedAllMeal:false,
+      pageIndex:1,
+      mealPageIndex:1,
+    })
     this._getOrders(() => {
-      that.data.isLoadedAllFruit = false;  //是否加载完全
-      that.data.pageIndex = 1;
       wx.stopPullDownRefresh();
       order.execSetStorageSync(false);  //更新标志位
     });
     this._getMealOrders(() => {
-      that.data.isLoadedAllMeal = false;  //是否加载完全
-      that.data.mealPageIndex = 1;
       wx.stopPullDownRefresh();
-      order.execSetStorageSync(false);  //更新标志位
+      mealOrder.execSetStorageSync(false);  //更新标志位
     });
   },
-
-
   onReachBottom: function () {
     //加载更多水果订单
-    if (activeIndex==1){
+    if (this.data.activeIndex==1){
       if (!this.data.isLoadedAllFruit) {
         this.data.pageIndex++;
         this._getOrders();
       }
     }
-    if (activeIndex == 0) {
+    if (this.data.activeIndex.activeIndex == 0) {
       if (!this.data.isLoadedAllMeal) {
         this.data.mealPageIndex++;
         this._getMealOrders();
@@ -304,10 +306,10 @@ Page({
       index = order.getDataSet(event, 'index');
     mealOrder.cancel(id, (data) => {
       if (data.code == 0) {
-        that.data.orderArr[index].payStatus = -1;
-        that.data.orderArr[index].orderStatus = 2;
+        that.data.mealOrderArr[index].payStatus = -1;
+        that.data.mealOrderArr[index].orderStatus = 2;
         that.setData({
-          orderArr: that.data.orderArr
+          mealOrderArr: that.data.mealOrderArr
         });
         that.onPullDownRefresh()
       } else {
@@ -326,5 +328,19 @@ Page({
       sliderOffset: e.currentTarget.offsetLeft,
       activeIndex: e.currentTarget.id
     });
-  }
+  },
+  startDateChange:function(e){
+    console.log('设置开始时间:', e.detail.value)
+    this.setData({
+      start:e.detail.value
+    })
+    this.onPullDownRefresh()
+  },
+  endDateChange: function (e) {
+    console.log('设置结束时间:', e.detail.value)
+    this.setData({
+      end:e.detail.value
+    })
+    this.onPullDownRefresh()
+  },
 })

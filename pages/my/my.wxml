@@ -15,18 +15,39 @@
       <button class="weui-btn mini-btn" type="primary" size="mini">编辑</button>
     </view> -->
   </view>
-  <view class="my-order">
-    <!-- <view class="item-title">我的订单</view> -->
-    <view class="order-tabs">
-      <block wx:for="{{tabs}}" wx:key="*this">
-        <view id="{{index}}" class="tab {{activeIndex == index ? 'tab-on' : ''}}" bindtap="tabClick">
-          <view class="weui-navbar__title">{{item}}</view>
+  <!-- 时间选择器 -->
+  <view class="order-tabs" style='margin-bottom: 5rpx;'>
+    <view class="tab">
+      <picker mode="date" value="{{start}}" start="2018-01-01" end="2020-12-31" bindchange="startDateChange">
+        <view class="weui-navbar__title" style='margin-left:48rpx'>
+          {{start}}
         </view>
-      </block>
+        <image class="contact-icon" src='../../images/icon/arrow@right.png'></image>
+      </picker>
     </view>
-    <view>
-      <view class="tab-slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    <text>至</text>
+    <view class="tab">
+       <picker mode="date" value="{{end}}" start="2018-01-01" end="2020-12-31" bindchange="endDateChange">
+        <view class="weui-navbar__title" style='margin-left:20rpx'>
+          {{end}}
+        </view>
+        <image class="contact-icon" src='../../images/icon/arrow@right.png'></image>
+      </picker> 
     </view>
+  </view>
+
+  <!-- <view class="item-title">我的订单</view> -->
+  <view class="order-tabs">
+    <block wx:for="{{tabs}}" wx:key="*this">
+      <view id="{{index}}" class="tab {{activeIndex == index ? 'tab-on' : ''}}" bindtap="tabClick">
+        <view class="weui-navbar__title">{{item}}</view>
+      </view>
+    </block>
+  </view>
+  <view>
+    <view class="tab-slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+  </view>
+  <view class="my-order">
     <!-- 水果订单列表 -->
     <view hidden="{{activeIndex != 1}}" class="item-main">
       <block wx:for="{{orderArr}}">
@@ -52,7 +73,7 @@
             </view>
           </view>
           <view class="order-bottom" wx:if="{{item.payStatus==0}}">
-            <text>实付:￥{{item.orderAmount}}</text>
+            <text>应付:￥{{item.orderAmount}}</text>
             <view wx:if="{{item.orderStatus==0}}" class="cancel" ontap="_cancel" data-id="{{item.orderId}}" data-index="{{index}}">取消订单</view>
             <view wx:if="{{item.orderStatus==0}}" class="pay" ontap="rePay" data-id="{{item.orderId}}" data-index="{{index}}">付款</view>
           </view>
@@ -80,11 +101,12 @@
               <text class="order-status-txt payed" wx:if="{{item.payStatus==1&&item.orderStatus==0}}">已付款</text>
               <text class="order-status-txt done" wx:if="{{item.orderStatus==4}}">已退款</text>
               <text class="order-status-txt done" wx:if="{{item.orderStatus==3}}">申请退款</text>
-              <text class="order-status-txt done" wx:if="{{item.orderStatus==1}}">已完结</text>              <text class="order-status-txt done" wx:if="{{item.orderStatus==2}}">已取消</text>
+              <text class="order-status-txt done" wx:if="{{item.orderStatus==1}}">已完结</text>
+              <text class="order-status-txt done" wx:if="{{item.orderStatus==2}}">已取消</text>
             </view>
           </view>
           <view class="order-bottom" wx:if="{{item.payStatus==0}}">
-            <text>实付:￥{{item.orderAmount}}</text>
+            <text>应付:￥{{item.orderAmount}}</text>
             <view wx:if="{{item.payStatus==0&&item.orderStatus==0}}" class="cancel" ontap="_mealCancel" data-id="{{item.orderId}}" data-index="{{index}}">取消订单</view>
             <view wx:if="{{item.orderStatus==0}}" class="pay" ontap="rePay" data-id="{{item.orderId}}" data-index="{{index}}">付款</view>
           </view>

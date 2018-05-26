@@ -97,6 +97,16 @@
 
 .order-tabs {
   display: flex;
+  background-color: #FFFFFF;
+}
+.picker{
+    padding: 13px;
+    background-color: #FFFFFF;
+}
+
+.contact-icon{
+    height: 48rpx;
+    width: 48rpx;
 }
 
 .tab {
@@ -104,9 +114,14 @@
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   flex: 1;
-  padding: 13px 0;
+  padding: 8px 0;
   text-align: center;
   font-size: 0;
+}
+.order-tabs text{
+  padding: 8px 0;
+  text-align: center;
+  font-size: 28rpx;
 }
 
 .tab.tab-on {

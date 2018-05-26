@@ -55,12 +55,37 @@
     </block>
   </view>
 
+  <!-- 时间选择器 -->
+  <view class='picker-title' wx:if='{{canRefund}}'>选择退款时间</view>
+  <view class="picker" wx:if='{{canRefund}}'>
+
+    <view class="tab" >
+      <picker mode="date" value="{{start}}" start="{{startBegin}}" end="{{startLimit}}" bindchange="startDateChange">
+        <view class="weui-navbar__title">
+          {{start}}
+        </view>
+        <image class="arrow-icon" src='../../images/icon/arrow@right.png'></image>
+      </picker>
+    </view>
+    <text>至</text>
+    <view class="tab">
+      <picker mode="date" value="{{end}}" start="{{endBegin}}" end="{{endLimit}}" bindchange="endDateChange">
+        <view class="weui-navbar__title">
+          {{end}}
+        </view>
+        <image class="arrow-icon" src='../../images/icon/arrow@right.png'></image>
+      </picker>
+    </view>
+  </view>
+  <view class='reason-input' wx:if='{{canRefund}}'>
+  <input class="weui-input" name="reason" placeholder="请输入退款原因" bindinput='reasonConfirm' />
+  </view>
   <!--结算-->
   <view class="footer-account-box order-accounts">
     <view class="total-account">
       付款合计：￥{{account}}
     </view>
-    <view wx:if="{{payStatus==0&&orderStatus==0}}" class="pay {{!addressInfo?'disabled':''}}" ontap="pay">去付款</view>
-        <view wx:if="{{payStatus==1&&orderStatus!=1}}" class="pay {{!addressInfo?'disabled':''}}" ontap="refund">去付款</view>
+    <view wx:if="{{payStatus==0&&orderStatus==0}}" class="pay {{!userInfo?'disabled':''}}" ontap="pay">去付款</view>
+    <view wx:if="{{payStatus==1&&orderStatus!=1}}" class="pay {{!userInfo?'disabled':''}}" ontap="refund">退款</view>
   </view>
 </view>

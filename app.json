@@ -25,12 +25,6 @@
   "tabBar": {
     "list": [
       {
-        "pagePath": "pages/index/index",
-        "iconPath": "images/toolbar/home.png",
-        "selectedIconPath": "images/toolbar/home@selected.png",
-        "text": "主页"
-      },
-      {
         "pagePath": "pages/category/category",
         "iconPath": "images/toolbar/category.png",
         "selectedIconPath": "images/toolbar/category@selected.png",

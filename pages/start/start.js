@@ -37,7 +37,7 @@ Page({
         else {
           wx.setStorageSync('userInfo', res.data.data.userInfo)
           wx.switchTab({
-            url: '../index/index'
+            url: '../my/my'
           })
         }
       }
