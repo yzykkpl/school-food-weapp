@@ -1,19 +1,25 @@
 // pages/product/product.js
-import {Cart} from '../cart/cart-model.js'
-var cart=new Cart()
+import { Cart } from '../cart/cart-model.js'
+var cart = new Cart()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    maxCounts:0,
+    maxCounts: 0,
     product: {},
-    countsArray: [1,2,3,4,5],
+    countsArray: [1, 2, 3, 4, 5],
     productCounts: 1,
-    tabs:['商品详情'],
+    tabs: ['商品详情'],
     cartTotalCounts: 0,
-    hiddenSmallImg: true
+    hiddenSmallImg: true,
+    start: '2018-01-01',
+    end: '2020-01-01',
+    endLimit: '2018-01-01',
+    startLimit: '2020-01-01',
+    startBegin: '2018-01-01',
+    days:1,
   },
 
   /**
@@ -23,16 +29,16 @@ Page({
     wx.showLoading({
       title: '加载中^_^',
     })
-    var that=this;
-    var id =options.id
+    var that = this;
+    var id = options.id
     that.setData({
       product: wx.getStorageSync(id),
       cartTotalCounts: cart.getCartTotalCounts(),
     })
-    that._updateCounts()
+    that._setDate()
 
   },
-  _updateCounts:function(){
+  _updateCounts: function () {
     // var that=this
     // var cartData = cart.getCartDataFromLocal();//拿到购物车中的数据
     // that.setData({
@@ -43,7 +49,7 @@ Page({
     //     that.setData({
     //       maxCounts: that.data.product.stock - cartData[i].counts
     //     })
-      
+
     //     break;
     //   }
     // }
@@ -55,7 +61,7 @@ Page({
     // that.setData({
     //   countsArray: countsArray
     // })
-    wx.hideLoading()
+    
   },
   //picker监听
   bindPickerChange: function (event) {
@@ -66,8 +72,8 @@ Page({
     })
   },
   //购物车监听
-  onAddToCart:function(event){
-    
+  onAddToCart: function (event) {
+
     this.addToCart();
     //var counts = this.data.cartTotalCounts + this.data.productCounts;
     // this.setData({
@@ -77,14 +83,14 @@ Page({
       return;
     }
     this._flyToCartEffect(event);
-    
+
   },
 
-  addToCart:function(){
-    var that=this;
-    var tempObj={};
-    var keys=['id','name','icon','price','stock','image']
-    keys.forEach(function(key){
+  addToCart: function () {
+    var that = this;
+    var tempObj = {};
+    var keys = ['id', 'name', 'icon', 'price', 'stock', 'image']
+    keys.forEach(function (key) {
       tempObj[key] = that.data.product[key]
     })
     cart.add(tempObj, that.data.productCounts)
@@ -136,4 +142,52 @@ Page({
     })
   },
 
+  _setDate: function (meal) {
+    //设置套餐所在月份
+    var that = this
+    //判断是否能退款
+    //获取当前时间与套餐月份比较
+    var date = new Date()
+    var currentDate = date.toLocaleDateString();
+    var startDate = new Date(currentDate)
+    startDate.setDate(startDate.getDate() + 3)
+    var startYear = startDate.getFullYear()
+    var startMonth = startDate.getMonth() + 1
+    startMonth = (startMonth < 10 ? "0" + startMonth : startMonth);
+    var startDay = startDate.getDate()
+    startDay = (startDay < 10 ? ("0" + startDay) : startDay);
+    var startDateStr = startYear.toString() + '-' + startMonth.toString() + '-' + startDay.toString()
+    that.setData({
+      startBegin: startDateStr,
+      start: startDateStr,
+      end: startDateStr,
+      endBegin: startDateStr,
+      // endLimit: mealLimitDate,
+      // startLimit: mealLimitDate
+    })
+    wx.hideLoading()
+
+  },
+
+  startDateChange: function (e) {
+    this.setData({
+      start: e.detail.value,
+      end: e.detail.value,
+      endBegin: e.detail.value,
+    })
+    this._updateDays()
+  },
+  endDateChange: function (e) {
+    this.setData({
+      end: e.detail.value,
+    })
+    this._updateDays()
+  },
+
+  _updateDays:function(){
+  var days = ((Date.parse(this.data.end.replace(/-/g, '/')) - Date.parse((this.data.start.replace(/-/g, '/')))) / 86400000)
+  this.setData({
+    days:days+1
+  })
+  }
 })

@@ -38,6 +38,10 @@ Page({
   },
   //组合表单数据，拿token
   formSubmit: function (e) {
+    wx.showLoading({
+      title: '加载中^_^',
+      mask: true
+    })
     var data = e.detail.value;
     if (!this.data.teacher) {
       if(!this._checkStudent(data)){
@@ -72,7 +76,7 @@ Page({
       sCallBack: function (data) {
         wx.setStorageSync('userInfo', data.data.userInfo)
         wx.switchTab({
-          url: '../index/index'
+          url: '../category/category'
         })
       },
       eCallback: function (err) {
@@ -106,22 +110,25 @@ Page({
   },
   //验证学生表单
   _checkStudent:function(data){
-    if (data.name==null) {
+    if (data.name.length==0) {
       wx.showToast({
+        icon:'none',
         title: '请填写姓名',
         duration: 1500
       })
       return false;
     }
-    if (data.stdNum ==null) {
+    if (data.stdNum.length == 0) {
       wx.showToast({
+        icon: 'none',
         title: '请填写学号',
         duration: 1500
       })
       return false;
     }
-    if (data.phone == null||data.phone.length<11) {
+    if (data.phone.length<11) {
       wx.showToast({
+        icon: 'none',
         title: '手机号格式错误',
         duration: 1500
       })
@@ -131,15 +138,17 @@ Page({
     return true;
   },
   _checkTeacher:function (data) {
-    if (data.name == null) {
+    if (data.name.length == 0) {
       wx.showToast({
+        icon: 'none',
         title: '请填写姓名',
         duration: 1500
       })
       return false;
     }
-    if (data.phone == null || data.phone.length < 11) {
+    if (data.phone.length < 11) {
       wx.showToast({
+        icon: 'none',
         title: '手机号格式错误',
         duration: 1500
       })

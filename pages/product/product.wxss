@@ -54,14 +54,15 @@
 
 /*选择数量和添加到购物车*/
 .cart-box{
-  width: 660rpx;
+  width: 400rpx;
   height: 100rpx;
-  margin: 30rpx auto;
+  margin: 30rpx auto 0rpx auto;
   border-radius: 100rpx;
   background-color: #AB956D;
   color: #fff;
   display: flex;
   align-items: center;
+   justify-content: center
 }
 
 .product-counts,.add-cart-btn{
@@ -147,7 +148,7 @@
   text-align: center;
 }
 .basic-info-box>view{
-  margin: 20rpx auto;
+  margin: 10rpx auto 0rpx auto;
 }
 .basic-info-box .stock{
   font-size: 24rpx;
@@ -164,13 +165,13 @@
 
 /*商品详情*/
 .detail-bottom-box{
-  margin-top: 30rpx;
+  margin-top: 10rpx;
 }
 .tabs-box{
   height: 90rpx;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15rpx;
+  margin-bottom: 5rpx;
 }
 .tabs-item{
   width: 33.3%;
@@ -202,7 +203,7 @@
 
 .properties-item{
   display: flex;
-  margin: 25rpx 0;
+  margin: 10rpx 0;
   font-size:24rpx;
 }
 .properties-name{
@@ -221,7 +222,7 @@
   font-size: 24rpx;
   color:808080;
   text-align: center;
-  margin-top: 30rpx;
+  margin-top: 10rpx;
 }
 
 
@@ -278,17 +279,6 @@
   }
 }
 
-/*选择数量和添加到购物车*/
-.cart-box{
-  width: 660rpx;
-  height: 100rpx;
-  margin: 30rpx auto;
-  border-radius: 100rpx;
-  background-color: #AB956D;
-  color: #fff;
-  display: flex;
-  align-items: center;
-}
 
 .product-counts,.add-cart-btn{
   height: 100%;
@@ -366,37 +356,15 @@
   width: 32rpx;
 }
 
-/*价格和名称*/
-.basic-info-box{
-  padding: 15rpx 0;
-  color: #454552;
-  text-align: center;
-}
-.basic-info-box>view{
-  margin: 20rpx auto;
-}
-.basic-info-box .stock{
-  font-size: 24rpx;
-}
-.basic-info-box .stock.no{
-  color:#B42F2D;
-}
-.basic-info-box .name{
-  font-size: 40rpx;
-}
-.basic-info-box .price{
-  font-size: 38rpx;
-}
-
 /*商品详情*/
 .detail-bottom-box{
-  margin-top: 30rpx;
+  margin-top: 10rpx;
 }
 .tabs-box{
   height: 90rpx;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15rpx;
+  margin-bottom: 5rpx;
 }
 .tabs-item{
   width: 33.3%;
@@ -429,7 +397,7 @@
 
 .properties-item{
   display: flex;
-  margin: 25rpx 0;
+  margin: 10rpx 0;
   font-size:24rpx;
 }
 .properties-name{
@@ -448,7 +416,7 @@
   font-size: 24rpx;
   color:808080;
   text-align: center;
-  margin-top: 30rpx;
+  margin-top: 10rpx;
 }
 
 .home-main-header{
@@ -459,6 +427,38 @@
   font-size: 32rpx;
   align-items: center;
   justify-content: center;
+}
+
+
+.picker {
+  display: flex;
+  width: 100%;
+  background-color: #fff;
+
+  border-top: 1rpx solid #ccc
+}
+.tab {
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 0;
+}
+
+.result {
+  border-bottom: 1rpx solid #ccc;
+  padding: 8px 0;
+  width: 100%;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.picker text {
+  padding: 8px 0;
+  text-align: center;
+  font-size: 28rpx;
 }
 
 .line{

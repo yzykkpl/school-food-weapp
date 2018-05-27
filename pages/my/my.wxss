@@ -109,14 +109,16 @@
     width: 48rpx;
 }
 
+
 .tab {
-  display: block;
+   display: block;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   flex: 1;
   padding: 8px 0;
   text-align: center;
-  font-size: 0;
+  font-size: 0; 
+
 }
 .order-tabs text{
   padding: 8px 0;
@@ -129,17 +131,20 @@
 }
 
 .tab-slider {
-  position: relative;
-  content: " ";
-  left: 0;
-  bottom: 0;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  text-align: center;
+  font-size: 0; 
   width: 6em;
   height: 3px;
+  margin:0 12.5%
+}
+
+.tab-slider.tab-slider-on {
   background-color: #1aad19;
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s;
+  
 }
 
 .item-title {

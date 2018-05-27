@@ -1,5 +1,4 @@
 <!--pages/my/my.wxml-->
-
 <view class="container my-container" hidden="{{!loadingHidden}}">
 
   <view class="my-header">
@@ -27,16 +26,17 @@
     </view>
     <text>至</text>
     <view class="tab">
-       <picker mode="date" value="{{end}}" start="2018-01-01" end="2020-12-31" bindchange="endDateChange">
+      <picker mode="date" value="{{end}}" start="2018-01-01" end="2020-12-31" bindchange="endDateChange">
         <view class="weui-navbar__title" style='margin-left:20rpx'>
           {{end}}
         </view>
         <image class="contact-icon" src='../../images/icon/arrow@right.png'></image>
-      </picker> 
+      </picker>
     </view>
   </view>
 
   <!-- <view class="item-title">我的订单</view> -->
+
   <view class="order-tabs">
     <block wx:for="{{tabs}}" wx:key="*this">
       <view id="{{index}}" class="tab {{activeIndex == index ? 'tab-on' : ''}}" bindtap="tabClick">
@@ -44,8 +44,11 @@
       </view>
     </block>
   </view>
-  <view>
-    <view class="tab-slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+  <view class="order-tabs">
+    <block wx:for="{{tabs}}" wx:key="*this">
+      <view id="{{index}}" class="tab-slider {{activeIndex == index ? 'tab-slider-on' : ''}}" bindtap="tabClick">
+      </view>
+    </block>
   </view>
   <view class="my-order">
     <!-- 水果订单列表 -->

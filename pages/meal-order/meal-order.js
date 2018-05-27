@@ -140,6 +140,7 @@ Page({
         })
         //开始支付
         console.log("开始支付")
+        wx.hideLoading()
         //that._execPay(orderId)
       }
       else if (data.code == -1) {
@@ -401,7 +402,7 @@ Page({
         startLimit: mealLimitDate
       })
       var limit = ((Date.parse(mealLimitDate) - Date.parse(startDateStr.replace(/-/g, '/'))) / 86400000)
-      if (limit > 0) {
+      if (limit > 0&&this.data.payStatus==1) {
         that.setData({
           canRefund: true
         })

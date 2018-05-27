@@ -7,7 +7,7 @@
   </view>
   <view class='form'>
     <view class="weui-cells__title" style='text-align:center'>
-      <text class='form-title'>请输入信息</text>
+      <text class='form-title'>请输入{{!teacher?'学生':'教师'}}信息</text>
     </view>
     <form bindsubmit="formSubmit">
       <view class="weui-cells weui-cells_after-title">
@@ -16,7 +16,7 @@
             <view class="weui-label">姓名</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" name="name" value="杨泽云" placeholder="请输入姓名" bindconfirm='nameConfirm' />
+            <input class="weui-input" name="name"  placeholder="请输入姓名" bindconfirm='nameConfirm' />
           </view>
         </view>
         <view class="weui-cell weui-cell_input">
@@ -32,7 +32,7 @@
             <view class="weui-label">手机</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" type='number' name="phone" value="15510660921" placeholder="请输入手机号" bindconfirm='phoneConfirm' />
+            <input class="weui-input" type='number' name="phone"  placeholder="请输入手机号" bindconfirm='phoneConfirm' />
           </view>
         </view>
         <view class="weui-cell weui-cell_select">

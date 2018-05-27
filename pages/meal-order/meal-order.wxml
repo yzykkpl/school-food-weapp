@@ -23,7 +23,7 @@
     </view>
   </view>
 
-  <!--地址-->
+  <!--学校信息-->
   <view class="order-address-info disabled">
     <view class="contact-box">
       <view>
@@ -86,6 +86,6 @@
       付款合计：￥{{account}}
     </view>
     <view wx:if="{{payStatus==0&&orderStatus==0}}" class="pay {{!userInfo?'disabled':''}}" ontap="pay">去付款</view>
-    <view wx:if="{{payStatus==1&&orderStatus!=1}}" class="pay {{!userInfo?'disabled':''}}" ontap="refund">退款</view>
+    <view wx:if="{{payStatus==1&&orderStatus!=1}}" class="pay {{!canRefund?'disabled':''}}" ontap="refund">退款</view>
   </view>
 </view>

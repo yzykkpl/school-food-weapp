@@ -23,6 +23,7 @@ class Base {
             content: res.data.message,
             showCancel: false,
           })
+          wx.hideLoading()
         }
         else {
           options.sCallBack && options.sCallBack(res.data);

@@ -9,8 +9,8 @@ var order = new Order();
 var mealOrder=new MealOrder();
 var my = new My();
 var token = new Token();
-var app = getApp()
-var sliderWidth = 115;
+var app = getApp();
+var sliderWidth = 96;
 
 Page({
   data: {
