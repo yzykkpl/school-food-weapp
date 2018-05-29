@@ -7,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    maxCounts:0,
     product: {},
     tabs:['商品详情'],
     hiddenSmallImg: true

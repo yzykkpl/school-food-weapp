@@ -1,147 +1,145 @@
 // pages/product/product.js
-import { Cart } from '../cart/cart-model.js'
-var cart = new Cart()
+import { Token } from '../../utils/token.js';
+import { Order } from '../order/order-model.js';
+var token = new Token();
+var order=new Order();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    maxCounts: 0,
     product: {},
     countsArray: [1, 2, 3, 4, 5],
     productCounts: 1,
     tabs: ['商品详情'],
-    cartTotalCounts: 0,
     hiddenSmallImg: true,
     start: '2018-01-01',
     end: '2020-01-01',
     endLimit: '2018-01-01',
     startLimit: '2020-01-01',
     startBegin: '2018-01-01',
-    days:1,
+    days: 1,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("load")
+    var that = this;
     wx.showLoading({
       title: '加载中^_^',
     })
-    var that = this;
+    var userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo) {
+      var utoken = wx.getStorageSync('token')
+      token.login(utoken, ()=>{
+        that.setData({
+          userInfo: wx.getStorageSync('userInfo')
+        })
+      })
+    }else{
+      that.setData({
+        userInfo: userInfo
+      })
+    }
     var id = options.id
     that.setData({
       product: wx.getStorageSync(id),
-      cartTotalCounts: cart.getCartTotalCounts(),
     })
     that._setDate()
-
   },
-  _updateCounts: function () {
-    // var that=this
-    // var cartData = cart.getCartDataFromLocal();//拿到购物车中的数据
-    // that.setData({
-    //   maxCounts: that.data.product.stock
-    // })
-    // for (var i = 0; i < cartData.length; i++) {
-    //   if (cartData[i].id == that.data.product.id) {
-    //     that.setData({
-    //       maxCounts: that.data.product.stock - cartData[i].counts
-    //     })
 
-    //     break;
-    //   }
-    // }
-
-    // var countsArray = new Array()
-    // for (var i = 1; i <= Math.min(10, that.data.maxCounts); i++) {
-    //   countsArray.push(i)
-    // }
-    // that.setData({
-    //   countsArray: countsArray
-    // })
-    
-  },
-  //picker监听
-  bindPickerChange: function (event) {
-    var index = event.detail.value;
-    var selectedCount = this.data.countsArray[index]
-    this.setData({
-      productCounts: selectedCount
-    })
-  },
-  //购物车监听
-  onAddToCart: function (event) {
-
-    this.addToCart();
-    //var counts = this.data.cartTotalCounts + this.data.productCounts;
-    // this.setData({
-    //   cartTotalCounts: cart.getCartTotalCounts()
-    // })
-    if (this.data.isFly) {
+  // 支付
+  pay: function () {
+    if (!this.data.userInfo) {
+      this.showTips('下单提示', '个人信息获取失败');
       return;
     }
-    this._flyToCartEffect(event);
+    wx.showLoading({
+      title: '加载中^_^',
+      mask: true
+    })
+    this._pay();
 
   },
 
-  addToCart: function () {
+  /*第一次支付*/
+  _pay: function () {
+    var userToken = wx.getStorageSync('token');
+    var orderForm = {};
+    if (userToken == null) {
+      token.getTokenFromServer()
+      showTips("错误", "验证失败，请稍后重试", false);
+      return
+    } else {
+      orderForm = this._makeOrderForm(this.data.product, userToken)
+    }
     var that = this;
-    var tempObj = {};
-    var keys = ['id', 'name', 'icon', 'price', 'stock', 'image']
-    keys.forEach(function (key) {
-      tempObj[key] = that.data.product[key]
-    })
-    cart.add(tempObj, that.data.productCounts)
-    that.setData({
-      maxCounts: that.data.maxCounts - that.data.productCounts
-    })
+    //支付分两步，第一步是生成订单号，然后根据订单号支付
+    order.doOrder(orderForm, (data) => {
+      //订单生成成功
+      if (data.code == 0) {
+        //更新订单状态
+        var orderId = data.data.orderId;
+        //开始支付
+        console.log("开始支付")
+        wx.hideLoading()
+        //that._execPay(orderId)
+      }
+      else if (data.code == -1) {
+        wx.showToast({
+          title: '登录校验失败',
+          icon: 'none',
+          duration: 1500
+        })
+        that.token.getTokenFromServer()
 
-  },
-  /*加入购物车动效*/
-  _flyToCartEffect: function (events) {
-    //获得当前点击的位置，距离可视区域左上角
-    var touches = events.touches[0];
-    var diff = {
-      x: '25px',
-      y: -10 - touches.clientY + 'px'
-    },
-      style = 'display: block;-webkit-transform:translate(' + diff.x + ',' + diff.y + ') rotate(350deg) scale(0)';  //移动距离
-    this.setData({
-      isFly: true,
-      translateStyle: style
+      }
     });
+  },
+
+  _makeOrderForm: function (product, token) {
+    var startDate = this.data.start
+    var endDate = this.data.end
+    var userInfo = this.data.userInfo
+    var days=this.data.days
+    var orderForm = {
+      buyerName: userInfo.name,
+      buyerPhone: userInfo.phone,
+      stdNum: userInfo.stdNum,
+      buyerSchool: userInfo.school,
+      buyerCls: userInfo.cls,
+      productId: product.id,
+      startDate: startDate,
+      endDate: endDate,
+      days: days,
+      token: token
+    }
+    return orderForm;
+  },
+  /*
+       *开始支付
+       * params:
+       * id - {int}订单id
+       */
+  _execPay: function (orderId) {
     var that = this;
-    setTimeout(() => {
-      that.setData({
-        isFly: false,
-        translateStyle: '-webkit-transform: none;',  //恢复到最初状态
-        isShake: true,
-      });
-      setTimeout(() => {
-        that.setData({
-          isShake: false,
-          cartTotalCounts: cart.getCartTotalCounts()
+    order.execPay(orderId, (statusCode) => {
+      if (statusCode != 0) {
+        var flag = statusCode == 2;
+        wx.navigateTo({
+          url: '../pay-result/pay-result?orderId=' + orderId + '&flag=' + flag + '&from=order'
         });
-      }, 200);
-    }, 1000);
-  },
-
-  /*跳转到购物车*/
-  onCartTap: function () {
-    wx.switchTab({
-      url: '/pages/cart/cart'
+      }else{
+        this.showTips("错误","调用微信支付失败",false)
+      }
     });
   },
-  previewImage: function () {
-    wx.previewImage({
-      current: this.data.product.image,
-      urls: [this.data.product.image]
 
-    })
-  },
 
+  /*设置时间*/
   _setDate: function (meal) {
     //设置套餐所在月份
     var that = this
@@ -162,11 +160,8 @@ Page({
       start: startDateStr,
       end: startDateStr,
       endBegin: startDateStr,
-      // endLimit: mealLimitDate,
-      // startLimit: mealLimitDate
     })
     wx.hideLoading()
-
   },
 
   startDateChange: function (e) {
@@ -184,10 +179,38 @@ Page({
     this._updateDays()
   },
 
-  _updateDays:function(){
-  var days = ((Date.parse(this.data.end.replace(/-/g, '/')) - Date.parse((this.data.start.replace(/-/g, '/')))) / 86400000)
-  this.setData({
-    days:days+1
-  })
-  }
+  _updateDays: function () {
+    var days = ((Date.parse(this.data.end.replace(/-/g, '/')) - Date.parse((this.data.start.replace(/-/g, '/')))) / 86400000)
+    this.setData({
+      days: days + 1
+    })
+  },
+  submitOrder: function () {
+    var account = this.data.product.price
+    var id = this.data.id
+    wx.navigateTo({
+      url: '../order/order?account=' + account + '&id=' + id
+    });
+  },
+  /*
+* 提示窗口
+* params:
+* title - {string}标题
+* content - {string}内容
+* flag - {bool}是否跳转到 "我的页面"
+*/
+  showTips: function (title, content, flag) {
+    wx.showModal({
+      title: title,
+      content: content,
+      showCancel: false,
+      success: function (res) {
+        if (flag) {
+          wx.switchTab({
+            url: '/pages/my/my'
+          });
+        }
+      }
+    });
+  },
 })

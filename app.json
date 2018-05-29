@@ -1,12 +1,13 @@
 {
   "pages": [
         "pages/start/start",
+    "pages/register/register",
+    
         "pages/category/category",
-
     "pages/meal/meal",
     "pages/my/my",
     "pages/meal-order/meal-order",
-    "pages/register/register",
+    
     "pages/index/index",
     "pages/product/product",
     "pages/cart/cart",
@@ -29,12 +30,6 @@
         "iconPath": "images/toolbar/category.png",
         "selectedIconPath": "images/toolbar/category@selected.png",
         "text": "分类"
-      },
-      {
-        "pagePath": "pages/cart/cart",
-        "iconPath": "images/toolbar/cart.png",
-        "selectedIconPath": "images/toolbar/cart@selected.png",
-        "text": "购物车"
       },
       {
         "pagePath": "pages/my/my",

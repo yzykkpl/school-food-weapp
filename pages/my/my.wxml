@@ -59,7 +59,7 @@
             <text>订单编号:</text>
             <text class="order-no-txt">{{item.orderId}}</text>
           </view>
-          <view class="order-main" ontap="showOrderDetailInfo" data-id="{{item.orderId}}">
+          <view class="order-main" data-id="{{item.orderId}}">
             <view class="item-left">
               <image src="{{item.snapIcon}}" mode='aspectFit'></image>
             </view>
@@ -70,7 +70,6 @@
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>
               <text class="order-status-txt payed" wx:if="{{item.payStatus==1&&item.orderStatus==0}}">已付款</text>
-              <text class="order-status-txt done" wx:if="{{item.payStatus==2}}">已退款</text>
               <text class="order-status-txt done" wx:if="{{item.orderStatus==2&&item.payStatus==0}}">已取消</text>
               <text class="order-status-txt done" wx:if="{{item.orderStatus==1}}">已完结</text>
             </view>
@@ -111,7 +110,7 @@
           <view class="order-bottom" wx:if="{{item.payStatus==0}}">
             <text>应付:￥{{item.orderAmount}}</text>
             <view wx:if="{{item.payStatus==0&&item.orderStatus==0}}" class="cancel" ontap="_mealCancel" data-id="{{item.orderId}}" data-index="{{index}}">取消订单</view>
-            <view wx:if="{{item.orderStatus==0}}" class="pay" ontap="rePay" data-id="{{item.orderId}}" data-index="{{index}}">付款</view>
+            <view wx:if="{{item.orderStatus==0}}" class="pay" ontap="mealRePay" data-id="{{item.orderId}}" data-index="{{index}}">付款</view>
           </view>
         </view>
       </block>

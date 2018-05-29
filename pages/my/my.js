@@ -64,7 +64,8 @@ Page({
     });
     //更新订单,相当自动下拉刷新,只有非第一次打开 “我的”页面，且有新的订单时 才调用。
     var newOrderFlag = order.hasNewOrder();
-    if (this.data.loadingHidden && newOrderFlag) {
+    var newMealOrderFlag = mealOrder.hasNewOrder();
+    if (newMealOrderFlag||newOrderFlag) {
       this.onPullDownRefresh();
     }
   },
@@ -73,7 +74,8 @@ Page({
     var that = this;
     this._getOrders();
     this._getMealOrders();
-    order.execSetStorageSync(false);  //更新标志位
+    order.execSetStorageSync(false);
+    mealOrder.execSetStorageSync(false);  //更新标志位
   },
 
   /*水果订单信息*/
@@ -131,16 +133,7 @@ Page({
       callback && callback();
     });
   },
-
-
-  /*显示水果订单的具体信息*/
-  showOrderDetailInfo: function (event) {
-    var id = order.getDataSet(event, 'id');
-    wx.navigateTo({
-      url: '../order/order?from=order&orderId=' + id
-    });
-  },
-
+  //显示套餐订单详情
   showMealOrderDetailInfo: function (event) {
     var id = order.getDataSet(event, 'id');
     wx.navigateTo({
@@ -152,13 +145,8 @@ Page({
   rePay: function (event) {
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
-
-    //online 上线实例，屏蔽支付功能
-    if (order.onPay) {
-      this._execPay(id, index);
-    } else {
-      this.showTips('支付提示', '本产品仅用于演示，支付系统已屏蔽');
-    }
+      console.log("水果再次支付")
+      //this._execPay(id, index);
   },
 
   /*水果支付*/
@@ -167,7 +155,6 @@ Page({
     order.execPay(id, (statusCode) => {
       if (statusCode > 0) {
         var flag = statusCode == 2;
-
         //更新订单显示状态
         if (flag) {
           that.data.orderArr[index].payStatus = 1;
@@ -175,8 +162,6 @@ Page({
             orderArr: that.data.orderArr
           });
         }
-
-        //跳转到 成功页面
         wx.navigateTo({
           url: '../pay-result/pay-result?orderId=' + id + '&flag=' + flag + '&from=my'
         });
@@ -186,20 +171,16 @@ Page({
     });
   },
 
-  /*水套餐未支付订单再次支付*/
+  /*套餐未支付订单再次支付*/
   mealRePay: function (event) {
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
 
-    //online 上线实例，屏蔽支付功能
-    if (order.onPay) {
-      this._mealExecPay(id, index);
-    } else {
-      this.showTips('支付提示', '本产品仅用于演示，支付系统已屏蔽');
-    }
+    console.log("套餐")
+      //this._mealExecPay(id, index);
   },
 
-  /*水果支付*/
+  /*套餐支付*/
   _mealExecPay: function (id, index) {
     var that = this;
     mealOrder.execPay(id, (statusCode) => {
@@ -213,8 +194,6 @@ Page({
             mealOrderArr: that.data.mealOrderArr
           });
         }
-
-        //跳转到 成功页面
         wx.navigateTo({
           url: '../pay-result/pay-result?orderId=' + id + '&flag=' + flag + '&from=my'
         });

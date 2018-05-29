@@ -60,44 +60,6 @@ Page({
       })
     }
   },
-
-  /*修改或者添加地址信息*/
-  // editAddress: function () {
-  //   var that = this;
-  //   wx.chooseAddress({
-  //     success: function (res) {
-  //       var addressInfo = {
-  //         name: res.userName,
-  //         phone: res.telNumber,
-  //         address: address.setAddressInfo(res)
-  //       };
-  //       that._bindAddressInfo(addressInfo);
-
-  //       //保存地址
-  //       wx.setStorageSync(that.data._storageKeyName, addressInfo)
-  //     },
-  //     fail: function () {
-  //       wx.getSetting({
-  //         success: function (res) {
-  //           if (!res.authSetting['scope.address']) {
-  //             wx.showModal({
-  //               title: '您已拒绝地址授权',
-  //               content: '请点击右上角"..."->"关于"->右上角"..."->"设置"进行授权',
-  //             })
-  //           }
-  //         }
-  //       })
-  //     }
-  //   })
-  // },
-
-  /*绑定地址信息*/
-  // _bindAddressInfo: function (addressInfo) {
-  //   this.setData({
-  //     addressInfo: addressInfo
-  //   });
-  // },
-
   /*下单和付款*/
   pay: function () {
     if (!this.data.userInfo) {
@@ -305,21 +267,15 @@ Page({
        * id - {int}订单id
        */
   _execPay: function (orderId) {
-
-    if (!order.onPay) {
-      this.showTips('打烊啦', '现在已经不配送啦', true);//屏蔽支付，提示
-
-      return;
-    }
     var that = this;
     order.execPay(orderId, (statusCode) => {
       if (statusCode != 0) {
-
-
         var flag = statusCode == 2;
         wx.navigateTo({
-          url: '../pay-result/pay-result?orderId=' + orderId + '&flag=' + flag + '&from=order'
+          url: '../pay-result/pay-result?orderId=' + orderId + '&flag=' + flag + '&from=meal'
         });
+      }else{
+        this.showTips("错误", "调用微信支付失败", false)
       }
     });
   },
@@ -374,15 +330,17 @@ Page({
     //获取当前时间与套餐月份比较
     var date = new Date()
     var dateGap = ((Date.parse(mealStartStr.replace(/-/g, '/')) - Date.parse(date.toLocaleDateString())) / 86400000)
-    if (dateGap > 3) {
+    if (dateGap > 3 && that.data.payStatus == 1) {
       that.setData({
         start: mealStartStr,
         startBegin: mealStartStr,
         end: mealStartStr,
         endBegin: mealStartStr,
         endLimit: mealLimitDate,
-        startLimit: mealLimitDate
+        startLimit: mealLimitDate,
+        canRefund:true
       })
+
     } else {
       var currentDate = date.toLocaleDateString();
       var startDate = new Date(currentDate)
@@ -393,17 +351,15 @@ Page({
       var startDay = startDate.getDate()
       startDay = (startDay < 10 ? ("0" + startDay) : startDay);
       var startDateStr = startYear.toString() + '-' + startMonth.toString() + '-' + startDay.toString()
-      that.setData({
-        startBegin: startDateStr,
-        start: startDateStr,
-        end: startDateStr,
-        endBegin: startDateStr,
-        endLimit: mealLimitDate,
-        startLimit: mealLimitDate
-      })
       var limit = ((Date.parse(mealLimitDate) - Date.parse(startDateStr.replace(/-/g, '/'))) / 86400000)
-      if (limit > 0&&this.data.payStatus==1) {
+      if (limit > 0&&that.data.payStatus==1) {
         that.setData({
+          startBegin: startDateStr,
+          start: startDateStr,
+          end: startDateStr,
+          endBegin: startDateStr,
+          endLimit: mealLimitDate,
+          startLimit: mealLimitDate,
           canRefund: true
         })
       }

@@ -91,32 +91,32 @@ class Order extends Base {
   }
 
   /*获得订单的具体内容*/
-  getOrderInfoById(orderId, callback) {
-    var token = wx.getStorageSync('token')
-    if (!token) {
-      showTips('错误', '登录信息过期,请重试')
-      this.token.getTokenFromServer()
-      return;
-    } else {
-      this.token._veirfyFromServer(token)
-    }
-    var that = this;
-    var allParams = {
-      url: '/buyer/order/detail',
-      method: 'GET',
-      data: {
-        token: token,
-        orderId: orderId
-      },
-      sCallBack: function (data) {
-        callback && callback(data);
-      },
-      eCallback: function () {
+  // getOrderInfoById(orderId, callback) {
+  //   var token = wx.getStorageSync('token')
+  //   if (!token) {
+  //     showTips('错误', '登录信息过期,请重试')
+  //     this.token.getTokenFromServer()
+  //     return;
+  //   } else {
+  //     this.token._veirfyFromServer(token)
+  //   }
+  //   var that = this;
+  //   var allParams = {
+  //     url: '/buyer/order/detail',
+  //     method: 'GET',
+  //     data: {
+  //       token: token,
+  //       orderId: orderId
+  //     },
+  //     sCallBack: function (data) {
+  //       callback && callback(data);
+  //     },
+  //     eCallback: function () {
 
-      }
-    };
-    that.request(allParams);
-  }
+  //     }
+  //   };
+  //   that.request(allParams);
+  // }
 
   /*本地缓存 保存／更新*/
   execSetStorageSync(data) {
@@ -135,7 +135,7 @@ class Order extends Base {
       this.token.getTokenFromServer()
       return;
     } else {
-      this.token._veirfyFromServer(token)
+      this.token.login(token)
     }
     var that = this;
     var allParams = {

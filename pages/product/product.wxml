@@ -29,7 +29,7 @@
     </view>
      <view class="result">已选择{{start}}至{{end}}共{{days}}天{{product.price*days}}元 </view>
 
-    <view class="cart-box" bindtap='submitOrder'>
+    <view class="cart-box" bindtap='pay'>
       <text>购买</text>
     </view>
   
