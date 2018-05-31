@@ -65,7 +65,8 @@
             </view>
             <view class="item-middle">
               <view>{{item.snapName}}</view>
-              <view>{{item.totalAccount}}件商品</view>
+              <view>{{item.days}}天</view>
+              <view>{{item.startDate}} 至 {{item.endDate}}</view> 
             </view>
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>
@@ -96,7 +97,7 @@
             </view>
             <view class="item-middle">
               <view>{{item.snapName}}</view>
-              <view>{{item.totalAccount}}件商品</view>
+              <!-- <view>{{item.totalAccount}}件商品</view> -->
             </view>
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>

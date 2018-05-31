@@ -59,7 +59,7 @@ class MealOrder extends Base {
   * */
   execPay(orderId, callback) {
     var allParams = {
-      url: 'pay/create',
+      url: 'mealPay/create',
       type: 'GET',
       data: { orderId: orderId },
       sCallBack: function (data) {

@@ -113,7 +113,7 @@ Page({
         })
         that.token.getTokenFromServer()
         
-      } else if (data.code == -2) {
+      } else{
         wx.showToast({
           title: data.msg,
           icon: 'none',
