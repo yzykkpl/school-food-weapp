@@ -1,14 +1,11 @@
 {
   "pages": [
-        "pages/start/start",
+    "pages/start/start",
     "pages/register/register",
-    
-        "pages/category/category",
+    "pages/category/category",
     "pages/meal/meal",
     "pages/my/my",
     "pages/meal-order/meal-order",
-    
-    "pages/index/index",
     "pages/product/product",
     "pages/cart/cart",
     "pages/order/order",

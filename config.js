@@ -1,5 +1,5 @@
 const CONF = {
-  baseUrl:'http://y2qwpa.natappfree.cc/canteen/',
+  baseUrl:'http://7jez9y.natappfree.cc/canteen/',
   onPay:true
 }
 

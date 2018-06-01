@@ -4,7 +4,6 @@ var app = getApp()
 var token = new Token()
 Page({
   data: {
-    authBtn: false
   },
   onLoad: function () {
     this.setData({

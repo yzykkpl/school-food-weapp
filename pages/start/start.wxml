@@ -1,22 +1,3 @@
 <!--start.wxml-->
 <view class="container">
-    <image class="title" src="../../images/homewords.jpg"></image>
-    <view class="content">
-      <view class="hd" style="transform:rotateZ({{angle}}deg);">
-
-        <image class="logo" src="../../images/logo.png"></image>
-        <image class="wave" src="https://yuancang-1256086874.cos.ap-chengdu.myqcloud.com/yc/images/more/wave.png" mode="aspectFill"></image>
-        <image class="wave wave-bg" src="https://yuancang-1256086874.cos.ap-chengdu.myqcloud.com/yc/images/more/wave.png" mode="aspectFill"></image>
-      </view>
-      <view class="bd">
-        <view class="confirm-btn">
-          <button open-type="getUserInfo" style="background:#AB956D;border-radius: 100rpx;" bindgetuserinfo="getUserInfo">进入店铺</button>
-        </view>
-        <view class='location'>
-        <image bindtap='map' src='../../images/location.png' style='width:100rpx;height:100rpx'></image>
-        </view>
-
-        <text class="copyright">@塬仓</text>
-      </view>
-    </view>
 </view>
