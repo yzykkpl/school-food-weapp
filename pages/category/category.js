@@ -1,5 +1,7 @@
 // pages/category/category.js
 import { Base } from '../../utils/base.js';
+import { Products } from '../../utils/products.js';
+var products = new Products();
 var base = new Base()
 Page({
 
@@ -10,7 +12,8 @@ Page({
     loadingHidden: false,
     transClassArr: ['tanslate0', 'tanslate1', 'tanslate2', 'tanslate3', 'tanslate4', 'tanslate5', 'tanslate6', 'tanslate7', 'tanslate8', 'tanslate9', 'tanslate10'],
     product: [],
-    currentMenuIndex: 0
+    currentMenuIndex: 0,
+    userInfo:null
   },
 
   /**
@@ -18,13 +21,14 @@ Page({
    */
   onLoad: function (options) {
     wx.hideLoading()
-    this._loadData()
+    products.getProducts(this._loadData)
   },
-
   _loadData: function () {
+    console.log("2")
     this.setData({
       product: wx.getStorageSync('product'),
       loadingHidden: true,
+      userInfo:wx.getStorageSync('userInfo')
     })
 
 

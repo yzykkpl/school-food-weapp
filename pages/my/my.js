@@ -176,7 +176,7 @@ Page({
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
 
-    console.log("套餐")
+    console.log("套餐支付")
       //this._mealExecPay(id, index);
   },
 

@@ -22,7 +22,8 @@ Page({
     startLimit: '2020-01-01',
     canRefund: false,
     startBegin: '2018-01-01',
-    reason: '-'
+    reason: '-',
+    orderId:null
   },
 
   /**
@@ -70,7 +71,7 @@ Page({
       title: '加载中^_^',
       mask: true
     })
-    if (this.data.payStatus == 0) {
+    if (this.data.orderId == null) {
       this._firstTimePay();
     } else {
       this._oneMoresTimePay();
@@ -128,6 +129,7 @@ Page({
   _oneMoresTimePay: function () {
     console.log("二次支付")
     //this._execPay(this.data.orderId);
+    wx.hideLoading()
   },
 
   // 申请退款
