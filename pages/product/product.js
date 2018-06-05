@@ -10,13 +10,11 @@ Page({
    */
   data: {
     product: {},
-    countsArray: [1, 2, 3, 4, 5],
+    countsArray: [1, 2, 3, 4, 5,6,7,8,9,10],
     productCounts: 1,
     tabs: ['商品详情'],
     hiddenSmallImg: true,
     start: '2018-01-01',
-    end: '2020-01-01',
-    endLimit: '2018-01-01',
     startLimit: '2020-01-01',
     startBegin: '2018-01-01',
     days: 1,
@@ -102,9 +100,8 @@ Page({
 
   _makeOrderForm: function (product, token) {
     var startDate = this.data.start
-    var endDate = this.data.end
     var userInfo = this.data.userInfo
-    var days=this.data.days
+    var counts = this.data.productCounts
     var orderForm = {
       buyerName: userInfo.name,
       buyerPhone: userInfo.phone,
@@ -112,9 +109,8 @@ Page({
       buyerSchool: userInfo.school,
       buyerCls: userInfo.cls,
       productId: product.id,
-      startDate: startDate,
-      endDate: endDate,
-      days: days,
+      date: startDate,
+      counts: counts,
       token: token
     }
     return orderForm;
@@ -140,7 +136,7 @@ Page({
 
 
   /*设置时间*/
-  _setDate: function (meal) {
+  _setDate: function () {
     //设置套餐所在月份
     var that = this
     //判断是否能退款
@@ -158,8 +154,6 @@ Page({
     that.setData({
       startBegin: startDateStr,
       start: startDateStr,
-      end: startDateStr,
-      endBegin: startDateStr,
     })
     wx.hideLoading()
   },
@@ -167,31 +161,31 @@ Page({
   startDateChange: function (e) {
     this.setData({
       start: e.detail.value,
-      end: e.detail.value,
-      endBegin: e.detail.value,
     })
-    this._updateDays()
+    // this._updateDays()
   },
-  endDateChange: function (e) {
+  countsChange: function (e) {
+    var index = e.detail.value;
+    console.log(e)
+    var selectedCount = this.data.countsArray[index]
     this.setData({
-      end: e.detail.value,
+      productCounts: selectedCount
     })
-    this._updateDays()
   },
 
-  _updateDays: function () {
-    var days = ((Date.parse(this.data.end.replace(/-/g, '/')) - Date.parse((this.data.start.replace(/-/g, '/')))) / 86400000)
-    this.setData({
-      days: days + 1
-    })
-  },
-  submitOrder: function () {
-    var account = this.data.product.price
-    var id = this.data.id
-    wx.navigateTo({
-      url: '../order/order?account=' + account + '&id=' + id
-    });
-  },
+  // _updateDays: function () {
+  //   var days = ((Date.parse(this.data.end.replace(/-/g, '/')) - Date.parse((this.data.start.replace(/-/g, '/')))) / 86400000)
+  //   this.setData({
+  //     days: days + 1
+  //   })
+  // },
+  // submitOrder: function () {
+  //   var account = this.data.product.price
+  //   var id = this.data.id
+  //   wx.navigateTo({
+  //     url: '../order/order?account=' + account + '&id=' + id
+  //   });
+  // },
   /*
 * 提示窗口
 * params:

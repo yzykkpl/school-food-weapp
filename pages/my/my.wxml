@@ -65,8 +65,8 @@
             </view>
             <view class="item-middle">
               <view>{{item.snapName}}</view>
-              <view>{{item.days}}天</view>
-              <view>{{item.startDate}} 至 {{item.endDate}}</view> 
+              <view>预定日期：{{item.date}}</view>
+              <view>数量：{{item.counts}}</view> 
             </view>
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>

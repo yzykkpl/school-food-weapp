@@ -7,7 +7,7 @@
     </view>
 
     <!-- 时间选择器 -->
-    <view class="home-main-header">选择日期</view>
+    <view class="home-main-header">选择日期和数量</view>
     <view class="picker">
       <view class="tab">
         <picker mode="date" value="{{start}}" start="{{startBegin}}" end="2020-12-31" bindchange="startDateChange">
@@ -17,17 +17,16 @@
           <image class="counts-icon" src='../../images/icon/arrow@right.png'></image>
         </picker>
       </view>
-      <text>至</text>
       <view class="tab">
-        <picker mode="date" value="{{end}}" start="{{endBegin}}" end="2020-12-31" bindchange="endDateChange">
+        <picker range='{{countsArray}}' value="{{index}}" bindchange="countsChange">
           <view class="weui-navbar__title" style='margin-left:48rpx'>
-            {{end}}
+            数量 {{productCounts}}
           </view>
           <image class="counts-icon" src='../../images/icon/arrow@right.png'></image>
         </picker>
-      </view>
+      </view> 
     </view>
-     <view class="result">已选择{{start}}至{{end}}共{{days}}天{{product.price*days}}元 </view>
+     <view class="result">已选择{{start}}日{{productCounts}}件共{{product.price*productCounts}}元 </view>
 
     <view class="cart-box" bindtap='pay'>
       <text>购买</text>
