@@ -10,6 +10,12 @@
 .order-container>view {
   background-color: #fff;
 }
+.comment-input{
+  border-bottom: 1rpx solid #ccc;
+  width: 100%;
+  text-align: left;
+  font-size: 28rpx;
+}
 
 .order-main {
   padding-bottom: 92rpx;

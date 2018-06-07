@@ -18,6 +18,7 @@ Page({
     startLimit: '2020-01-01',
     startBegin: '2018-01-01',
     days: 1,
+    comment:'-'
   },
 
   /**
@@ -111,7 +112,8 @@ Page({
       productId: product.id,
       date: startDate,
       counts: counts,
-      token: token
+      token: token,
+      comment:this.data.comment
     }
     return orderForm;
   },
@@ -170,6 +172,11 @@ Page({
     var selectedCount = this.data.countsArray[index]
     this.setData({
       productCounts: selectedCount
+    })
+  },
+  commentConfirm: function (e) {
+    this.setData({
+      comment: e.detail.value
     })
   },
 

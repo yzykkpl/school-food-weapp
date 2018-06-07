@@ -8,6 +8,10 @@
   display: flex;
 }
 
+.comment{
+  
+}
+
 .my-header {
   background-color: #ab956d;
   color: #fff;

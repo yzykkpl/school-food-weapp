@@ -13,6 +13,12 @@
 .detail-topic-img image{
   width: 100%;
 }
+.comment-input{
+  border-bottom: 1rpx solid #ccc;
+  width: 100%;
+  text-align: left;
+  font-size: 28rpx;
+}
 
 
 .fixed-btns-box{

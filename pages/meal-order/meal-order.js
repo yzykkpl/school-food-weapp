@@ -23,7 +23,8 @@ Page({
     canRefund: false,
     startBegin: '2018-01-01',
     reason: '-',
-    orderId:null
+    orderId:null,
+    comment:'-',
   },
 
   /**
@@ -256,7 +257,8 @@ Page({
       buyerSchool: userInfo.school,
       buyerCls: userInfo.cls,
       mealId: this.data.meal.id,
-      token: token
+      token: token,
+      comment:this.data.comment
     }
     return orderForm;
   },
@@ -306,6 +308,7 @@ Page({
         that.setData({
           payStatus: data.data.payStatus,
           orderStatus: data.data.orderStatus,
+          comment:data.data.comment,
           meal: data.data.mealInfo,
           account: data.data.orderAmount,
           basicInfo: {
@@ -384,6 +387,11 @@ Page({
   reasonConfirm: function (e) {
     this.setData({
       reason: e.detail.value
+    })
+  },
+  commentConfirm: function (e) {
+    this.setData({
+      comment: e.detail.value
     })
   },
 

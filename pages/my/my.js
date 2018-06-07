@@ -6,7 +6,7 @@ import { Token } from '../../utils/token.js';
 
 var address = new Address();
 var order = new Order();
-var mealOrder=new MealOrder();
+var mealOrder = new MealOrder();
 var my = new My();
 var token = new Token();
 var app = getApp();
@@ -16,30 +16,30 @@ Page({
   data: {
     tabs: ['套餐订单', '水果订单'],
     pageIndex: 1,
-    mealPageIndex:1,
+    mealPageIndex: 1,
     isLoadedAllFruit: false,
-    isLoadedAllMeal:false,
+    isLoadedAllMeal: false,
     loadingHidden: false,
     orderArr: [],
-    mealOrderArr:[],
+    mealOrderArr: [],
     addressInfo: null,
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
-    start:'2018-01-01',
-    end:'2020-01-01'
+    start: '2018-01-01',
+    end: '2020-01-01'
   },
   onLoad: function () {
-    var date=new Date()
-    var currentYear=date.getFullYear();
-    var currentMounth=date.getMonth();
-    var nextMounth = currentMounth+1;
+    var date = new Date()
+    var currentYear = date.getFullYear();
+    var currentMounth = date.getMonth();
+    var nextMounth = currentMounth + 1;
     nextMounth = (nextMounth < 9 ? "0" + (nextMounth + 1) : nextMounth + 1);
-    currentMounth = (currentMounth < 9 ? "0" + (currentMounth+1) : currentMounth+1); 
-    var startDate = currentYear.toString() + '-' + currentMounth.toString()+'-'+'01'
+    currentMounth = (currentMounth < 9 ? "0" + (currentMounth + 1) : currentMounth + 1);
+    var startDate = currentYear.toString() + '-' + currentMounth.toString() + '-' + '01'
     var endDate = currentYear.toString() + '-' + nextMounth.toString() + '-' + '01'
-    if (currentMounth==12){
-      endDate = (currentYear+1).toString()+'-'+'01-01'
+    if (currentMounth == 12) {
+      endDate = (currentYear + 1).toString() + '-' + '01-01'
     }
     this.setData({
       start: startDate,
@@ -54,7 +54,7 @@ Page({
         });
       }
     });
-    
+
     this._loadData();
   },
   onShow: function () {
@@ -65,7 +65,7 @@ Page({
     //更新订单,相当自动下拉刷新,只有非第一次打开 “我的”页面，且有新的订单时 才调用。
     var newOrderFlag = order.hasNewOrder();
     var newMealOrderFlag = mealOrder.hasNewOrder();
-    if (newMealOrderFlag||newOrderFlag) {
+    if (newMealOrderFlag || newOrderFlag) {
       this.onPullDownRefresh();
     }
   },
@@ -87,7 +87,7 @@ Page({
 
       return;
     }
-    order.getOrders(this.data.pageIndex - 1, token, this.data.start, this.data.end,(res) => {
+    order.getOrders(this.data.pageIndex - 1, token, this.data.start, this.data.end, (res) => {
       var data = res.data;
       that.setData({
         loadingHidden: true
@@ -115,7 +115,7 @@ Page({
 
       return;
     }
-    mealOrder.getOrders(this.data.mealPageIndex - 1, token, this.data.start,this.data.end,(res) => {
+    mealOrder.getOrders(this.data.mealPageIndex - 1, token, this.data.start, this.data.end, (res) => {
       var data = res.data;
       that.setData({
         loadingHidden: true
@@ -145,8 +145,8 @@ Page({
   rePay: function (event) {
     var id = order.getDataSet(event, 'id'),
       index = order.getDataSet(event, 'index');
-      console.log("水果再次支付")
-      //this._execPay(id, index);
+    console.log("水果再次支付")
+    //this._execPay(id, index);
   },
 
   /*水果支付*/
@@ -177,7 +177,7 @@ Page({
       index = order.getDataSet(event, 'index');
 
     console.log("套餐支付")
-      //this._mealExecPay(id, index);
+    //this._mealExecPay(id, index);
   },
 
   /*套餐支付*/
@@ -207,12 +207,12 @@ Page({
   onPullDownRefresh: function () {
     var that = this;
     this.setData({
-      orderArr:[],
-      mealOrderArr:[],
-      isLoadedAllFruit:false,
-      isLoadedAllMeal:false,
-      pageIndex:1,
-      mealPageIndex:1,
+      orderArr: [],
+      mealOrderArr: [],
+      isLoadedAllFruit: false,
+      isLoadedAllMeal: false,
+      pageIndex: 1,
+      mealPageIndex: 1,
     })
     this._getOrders(() => {
       wx.stopPullDownRefresh();
@@ -225,7 +225,7 @@ Page({
   },
   onReachBottom: function () {
     //加载更多水果订单
-    if (this.data.activeIndex==1){
+    if (this.data.activeIndex == 1) {
       if (!this.data.isLoadedAllFruit) {
         this.data.pageIndex++;
         this._getOrders();
@@ -308,18 +308,31 @@ Page({
       activeIndex: e.currentTarget.id
     });
   },
-  startDateChange:function(e){
+  startDateChange: function (e) {
     console.log('设置开始时间:', e.detail.value)
     this.setData({
-      start:e.detail.value
+      start: e.detail.value
     })
     this.onPullDownRefresh()
   },
   endDateChange: function (e) {
     console.log('设置结束时间:', e.detail.value)
     this.setData({
-      end:e.detail.value
+      end: e.detail.value
     })
     this.onPullDownRefresh()
   },
+  //显示水果订单备注
+  showComment: function (e) {
+    var index = e.target.dataset.index
+    var comment = this.data.orderArr[index].comment
+    wx.showModal({
+      content: comment,
+      showCancel: false,
+    });
+  },
+
+
+
+
 })

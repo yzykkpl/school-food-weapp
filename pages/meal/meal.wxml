@@ -4,9 +4,11 @@
     <view class="detail-topic-img">
       <image src="{{product.icon}}" mode="aspectFit"></image>
     </view>
-
-    <view bindtap="submitOrder" class="cart-box">
-      <text>购买</text>
+    <view>
+      <view bindtap="submitOrder" class="cart-box">
+        <text>购买</text>
+      </view>
+     
     </view>
 
     <view class="basic-info-box">

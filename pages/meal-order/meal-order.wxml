@@ -52,14 +52,22 @@
           <view>￥{{meal.price||meal.mealPrice}}</view>
         </view>
       </view>
+      <view class='comment-input' wx:if="{{!basicInfo}}">
+        <input class="weui-input" name="comment" placeholder="添加备注" bindinput='commentConfirm' />
+      </view>
+      <view class='comment-input' wx:if="{{basicInfo}}">
+        <text>备注：{{comment}}</text>
+      </view>
     </block>
+
   </view>
+
 
   <!-- 时间选择器 -->
   <view class='picker-title' wx:if='{{canRefund}}'>选择退款时间</view>
   <view class="picker" wx:if='{{canRefund}}'>
 
-    <view class="tab" >
+    <view class="tab">
       <picker mode="date" value="{{start}}" start="{{startBegin}}" end="{{startLimit}}" bindchange="startDateChange">
         <view class="weui-navbar__title">
           {{start}}
@@ -78,7 +86,7 @@
     </view>
   </view>
   <view class='reason-input' wx:if='{{canRefund}}'>
-  <input class="weui-input" name="reason" placeholder="请输入退款原因" bindinput='reasonConfirm' />
+    <input class="weui-input" name="reason" placeholder="请输入退款原因" bindinput='reasonConfirm' />
   </view>
   <!--结算-->
   <view class="footer-account-box order-accounts">

@@ -24,15 +24,18 @@
           </view>
           <image class="counts-icon" src='../../images/icon/arrow@right.png'></image>
         </picker>
-      </view> 
+      </view>
     </view>
-     <view class="result">已选择{{start}}日{{productCounts}}件共{{product.price*productCounts}}元 </view>
+    <view class="result">已选择{{start}}日{{productCounts}}件共{{product.price*productCounts}}元 </view>
+    <view class='comment-input' wx:if="{{!basicInfo}}">
+      <input class="weui-input" name="comment" placeholder="添加备注" bindinput='commentConfirm' />
+    </view>
 
     <view class="cart-box" bindtap='pay'>
       <text>购买</text>
     </view>
-  
-   
+
+
     <view class="basic-info-box">
       <view class="name">{{product.name}}</view>
       <view class="price">￥{{product.price}}/天/份</view>

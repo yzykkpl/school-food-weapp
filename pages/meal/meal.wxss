@@ -13,6 +13,13 @@
 .detail-topic-img image{
   width: 100%;
 }
+.reason-input{
+  border-top: 1rpx solid #ccc;
+  border-bottom: 1rpx solid #ccc;
+  width: 100%;
+  text-align: left;
+  font-size: 28rpx;
+}
 
 
 .fixed-btns-box{

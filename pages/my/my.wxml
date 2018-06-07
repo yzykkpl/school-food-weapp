@@ -66,7 +66,10 @@
             <view class="item-middle">
               <view>{{item.snapName}}</view>
               <view>预定日期：{{item.date}}</view>
-              <view>数量：{{item.counts}}</view> 
+              <view style='display: flex;  align-items: center;justify-content: space-between;'>
+                <view>数量：{{item.counts}}</view>
+                <view style='color:blue' data-index="{{index}}" ontap="showComment">查看备注</view>
+              </view>
             </view>
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>
@@ -97,7 +100,6 @@
             </view>
             <view class="item-middle">
               <view>{{item.snapName}}</view>
-              <!-- <view>{{item.totalAccount}}件商品</view> -->
             </view>
             <view class="item-right">
               <text class="order-status-txt unpay" wx:if="{{item.payStatus==0&&item.orderStatus==0}}">待付款</text>
