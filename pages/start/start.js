@@ -6,6 +6,9 @@ Page({
   data: {
   },
   onLoad: function () {
+    wx.showLoading({
+      title: '登录中',
+    })
     this.setData({
       verifyUrl: token.getVerifyUrl()
     })
@@ -20,6 +23,7 @@ Page({
     token.getTokenFromServer(this.login)
   },
   login: function (token) {
+    wx.hideLoading();
     var that = this;
     wx.request({
       url: that.data.verifyUrl + token,

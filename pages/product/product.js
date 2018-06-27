@@ -85,7 +85,7 @@ Page({
         //开始支付
         console.log("开始支付")
         wx.hideLoading()
-        //that._execPay(orderId)
+        that._execPay(orderId)
       }
       else if (data.code == -1) {
         wx.showToast({

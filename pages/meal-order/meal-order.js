@@ -23,8 +23,8 @@ Page({
     canRefund: false,
     startBegin: '2018-01-01',
     reason: '-',
-    orderId:null,
-    comment:'-',
+    orderId: null,
+    comment: '-',
   },
 
   /**
@@ -105,7 +105,7 @@ Page({
         //开始支付
         console.log("开始支付")
         wx.hideLoading()
-        //that._execPay(orderId)
+        that._execPay(orderId)
       }
       else if (data.code == -1) {
         wx.showToast({
@@ -114,22 +114,22 @@ Page({
           duration: 1500
         })
         that.token.getTokenFromServer()
-        
-      } else{
+
+      } else {
         wx.showToast({
           title: data.msg,
           icon: 'none',
           duration: 1500
         })
-       
+
       }
     });
   },
 
   /* 再次次支付*/
   _oneMoresTimePay: function () {
-    console.log("二次支付")
-    //this._execPay(this.data.orderId);
+    console.log("二次支付");
+    this._execPay(this.data.orderId);
     wx.hideLoading()
   },
 
@@ -144,7 +144,7 @@ Page({
       success: function (res) {
         if (res.confirm) {
           var reason = that.data.reason
-          
+
           that._refund(reason, dateGap + 1)
         } else if (res.cancel) {
         }
@@ -181,7 +181,7 @@ Page({
           duration: 1500
         })
         that.token.getTokenFromServer()
-      } else if (data.code == -2){
+      } else if (data.code == -2) {
         wx.showToast({
           title: '订单和用户不匹配',
           icon: 'none',
@@ -195,7 +195,7 @@ Page({
         })
       } else if (data.code == -4) {
         wx.showToast({
-          title: data.msg+'退款日期重复',
+          title: data.msg + '退款日期重复',
           icon: 'none',
           duration: 1500
         })
@@ -258,7 +258,7 @@ Page({
       buyerCls: userInfo.cls,
       mealId: this.data.meal.id,
       token: token,
-      comment:this.data.comment
+      comment: this.data.comment
     }
     return orderForm;
   },
@@ -278,7 +278,7 @@ Page({
         wx.navigateTo({
           url: '../pay-result/pay-result?orderId=' + orderId + '&flag=' + flag + '&from=meal'
         });
-      }else{
+      } else {
         this.showTips("错误", "调用微信支付失败", false)
       }
     });
@@ -305,14 +305,16 @@ Page({
         //console.log(data)
         var createDate = new Date(data.data.createTime * 1000)
 
+        var createDateFmt=that.dateFormat(createDate, "yyyy-MM-dd hh:mm:ss")
+
         that.setData({
           payStatus: data.data.payStatus,
           orderStatus: data.data.orderStatus,
-          comment:data.data.comment,
+          comment: data.data.comment,
           meal: data.data.mealInfo,
           account: data.data.orderAmount,
           basicInfo: {
-            orderTime: createDate.toLocaleString(),
+            orderTime: createDateFmt,
             orderNo: data.data.orderId
           }
         });
@@ -343,7 +345,7 @@ Page({
         endBegin: mealStartStr,
         endLimit: mealLimitDate,
         startLimit: mealLimitDate,
-        canRefund:true
+        canRefund: true
       })
 
     } else {
@@ -357,7 +359,7 @@ Page({
       startDay = (startDay < 10 ? ("0" + startDay) : startDay);
       var startDateStr = startYear.toString() + '-' + startMonth.toString() + '-' + startDay.toString()
       var limit = ((Date.parse(mealLimitDate) - Date.parse(startDateStr.replace(/-/g, '/'))) / 86400000)
-      if (limit > 0&&that.data.payStatus==1) {
+      if (limit > 0 && that.data.payStatus == 1) {
         that.setData({
           startBegin: startDateStr,
           start: startDateStr,
@@ -393,6 +395,24 @@ Page({
     this.setData({
       comment: e.detail.value
     })
+  },
+
+  dateFormat: function (date, fmt) {
+    var o = {
+      "M+": date.getMonth() + 1,                 //月份   
+      "d+": date.getDate(),                    //日   
+      "h+": date.getHours(),                   //小时   
+      "m+": date.getMinutes(),                 //分   
+      "s+": date.getSeconds(),                 //秒   
+      "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+      "S": date.getMilliseconds()             //毫秒   
+    };
+    if (/(y+)/.test(fmt))
+      fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+      if (new RegExp("(" + k + ")").test(fmt))
+        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
   },
 
   /**

@@ -50,6 +50,7 @@ Page({
       if (!this._checkStudent(data)) {
         return;
       }
+      data.schoolId = this.data.schools[data.school].id
       data.school = this.data.schools[data.school].name
       data.cls = this.data.classes[data.cls].clsName
       data.status = '0'
