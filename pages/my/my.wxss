@@ -18,8 +18,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30rpx;
-  font-size: 28rpx;
+  padding: 10rpx 10rpx 10rpx 0rpx;
+  /* font-size: 28rpx; */
 }
 
 .my-inf {
@@ -27,7 +27,7 @@
   color: #fff;
   display: flex;
   align-items: center;
-  font-size: 28rpx;
+  font-size: 65%;
 }
 
 .my-header image {
@@ -38,6 +38,30 @@
 
 .my-header text {
   margin-left: 20rpx;
+
+}
+.stdNum{
+  margin-left:5rpx;
+  text-overflow:clip;
+  text-align: left;
+   /* overflow:auto; */
+  /* white-space:nowrap;  */
+  word-wrap:break-word;
+  width: 30%;
+}
+.name{
+  text-overflow:clip;
+  overflow:scroll;
+  text-align: left;
+  white-space:nowrap;
+  width: 25%;
+}
+.school{
+  text-overflow:clip;
+  overflow:hidden;
+  text-align: left;
+
+  max-width: 70%;
 }
 
 .my-address {

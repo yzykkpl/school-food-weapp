@@ -33,7 +33,7 @@ Page({
         if (code == -1) {
           that.getToken()
         } else if (code == -2) {
-          wx.navigateTo({
+          wx.redirectTo({
             url: '../register/register',
           })
         }

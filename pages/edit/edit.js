@@ -58,6 +58,7 @@ Page({
       if (!this._checkTeacher(data)) {
         return;
       }
+      data.schoolId = this.data.schools[data.school].id
       data.school = this.data.schools[data.school].name
       data.cls = '-'
       data.stdNum = '-'
@@ -164,6 +165,17 @@ Page({
     this.setData({
       classes: data[0].cls
     })
+    var schoolId=this.data.userInfo.schoolId;
+    for(var i=0;i<data.length;i++){
+      if(data[i].id==schoolId){
+        this.setData({
+          schoolIndex: i,
+          classes: data[i].cls
+        })
+        break;
+      }
+    }
+
   }
   // getUserInfo: function (res) {
   //   console.log(res)

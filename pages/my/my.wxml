@@ -2,10 +2,10 @@
 <view class="container my-container" hidden="{{!loadingHidden}}">
 
   <view class="my-header">
-    <view class="my-inf">
-      <text class="name">{{userInfo.stdNum}}</text>
+    <view class="my-inf" style='width:80%'>
+      <text class="stdNum">{{userInfo.stdNum}}</text>
       <text class="name">{{userInfo.name}}</text>
-      <text class="name">{{userInfo.school}}</text>
+      <text class="school">{{userInfo.school}}</text>
     </view>
     <navigator class="my-inf" url="/pages/edit/edit" open-type="navigate" hover-class="other-navigator-hover">
       <button class="weui-btn mini-btn" type="primary" size="mini">编辑</button>

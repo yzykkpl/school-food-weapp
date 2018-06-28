@@ -1,8 +1,8 @@
 <!--pages/register/register.wxml-->
 <view class='container'>
   <view class='choices'>
-      <button class="weui-btn" style="margin-top:15px;" type="{{!teacher?'primary':'default'}}" plain="true" bindtap='switchStudent' >学生</button>
-    <button class="weui-btn"  type="{{teacher?'primary':'default'}}" plain="true" bindtap='switchTeacher' >教师</button>
+    <button class="weui-btn" style="margin-top:15px;" type="{{!teacher?'primary':'default'}}" plain="true" bindtap='switchStudent'>学生</button>
+    <button class="weui-btn" type="{{teacher?'primary':'default'}}" plain="true" bindtap='switchTeacher'>教师</button>
 
   </view>
   <view class='form'>
@@ -16,7 +16,7 @@
             <view class="weui-label">姓名</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" name="name"  placeholder="请输入姓名" bindconfirm='nameConfirm' />
+            <input class="weui-input" name="name" placeholder="请输入姓名" bindconfirm='nameConfirm' />
           </view>
         </view>
         <view wx:if='{{!teacher}}' class="weui-cell weui-cell_input">
@@ -32,7 +32,7 @@
             <view class="weui-label">手机</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" type='number' name="phone"  placeholder="请输入手机号" bindconfirm='phoneConfirm' />
+            <input class="weui-input" type='number' name="phone" placeholder="请输入手机号" bindconfirm='phoneConfirm' />
           </view>
         </view>
         <view class="weui-cell weui-cell_select">
@@ -41,25 +41,33 @@
           </view>
           <view class="weui-cell__bd">
             <picker bindchange="bindSchoolChange" name="school" value="{{schoolIndex}}" range="{{schools}}" range-key='name'>
-              <view class="weui-select weui-select_in-select-after">{{schools[schoolIndex].name}}</view>
-            </picker>
+              <view class="weui-select weui-select_in-select-after" style='width:100%;text-overflow:ellipsis;overflow:hidden;'>
+              <view style='font-size:80%'>
+                {{schools[schoolIndex].name}}
+              </view>
           </view>
-        </view>
-        <view wx:if='{{!teacher}}' class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view  class="weui-label">班级</view>
-          </view>
-          <view class="weui-cell__bd">
-            <picker bindchange="bindClassChange" name="cls" value="{{classIndex}}" range="{{classes}}" range-key='clsName' disabled='{{teacher}}'>
-              <view  class="weui-select weui-select_in-select-after">{{!teacher?classes[classIndex].clsName:'教师不用选择'}}</view>
-            </picker>
-          </view>
+          </picker>
         </view>
       </view>
-      <view class="confirm">
-        <button class="weui-btn" form-type='submit' type="primary" plain="true">提交注册</button>
+      <view wx:if='{{!teacher}}' class="weui-cell weui-cell_select">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
+          <view class="weui-label">班级</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker bindchange="bindClassChange" name="cls" value="{{classIndex}}" range="{{classes}}" range-key='clsName' disabled='{{teacher}}'>
+            <view class="weui-select weui-select_in-select-after" style='width:100%;text-overflow:ellipsis;overflow:hidden;'>
+              <view style='font-size:80%'>
+                {{!teacher?classes[classIndex].clsName:'教师不用选择'}}
+              </view>
+            </view>
+          </picker>
+        </view>
       </view>
-    </form>
   </view>
+  <view class="confirm">
+    <button class="weui-btn" form-type='submit' type="primary" plain="true">提交注册</button>
+  </view>
+  </form>
+</view>
 
 </view>
